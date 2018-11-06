@@ -56,6 +56,10 @@ public class FundTransferSLIPS {
     @JoinColumn(name = "fundTransferSLIPSFiles")
     private List<FundTransferSLIPSFiles> fundTransferSLIPSIds;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fundTransferSLIPSBreakDownId")
+    private FundTransferSLIPSBreakDown fundTransferSLIPSBreakDown;
+
     private Date requestCompleteDate;
 
     private boolean status;
@@ -63,17 +67,20 @@ public class FundTransferSLIPS {
     public FundTransferSLIPS() {
     }
 
-    public FundTransferSLIPS(@NotNull String creditAccountNo, @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String accountName,
-                             @NotNull double ammount, @NotNull Bank bank, @NotNull Branch branch,
-                             @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String reason,
-                             CustomerTransactionRequest customerTransactionRequest) {
+    public FundTransferSLIPS(@NotNull String creditAccountNo, @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String accountName, @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String accountNumber, @NotNull double ammount, @NotNull Bank bank, @NotNull Branch branch, @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String reason, String url, CustomerTransactionRequest customerTransactionRequest, List<FundTransferSLIPSFiles> fundTransferSLIPSIds, FundTransferSLIPSBreakDown fundTransferSLIPSBreakDown, Date requestCompleteDate, boolean status) {
         this.creditAccountNo = creditAccountNo;
         this.accountName = accountName;
+        this.accountNumber = accountNumber;
         this.ammount = ammount;
         this.bank = bank;
         this.branch = branch;
         this.reason = reason;
+        this.url = url;
         this.customerTransactionRequest = customerTransactionRequest;
+        this.fundTransferSLIPSIds = fundTransferSLIPSIds;
+        this.fundTransferSLIPSBreakDown = fundTransferSLIPSBreakDown;
+        this.requestCompleteDate = requestCompleteDate;
+        this.status = status;
     }
 
     public String getUrl() {
@@ -178,5 +185,13 @@ public class FundTransferSLIPS {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public FundTransferSLIPSBreakDown getFundTransferSLIPSBreakDown() {
+        return fundTransferSLIPSBreakDown;
+    }
+
+    public void setFundTransferSLIPSBreakDown(FundTransferSLIPSBreakDown fundTransferSLIPSBreakDown) {
+        this.fundTransferSLIPSBreakDown = fundTransferSLIPSBreakDown;
     }
 }

@@ -37,6 +37,8 @@ public class CashDepositServiceImpl implements CashDepositService {
     private CashDepositErrorRecordsRepository cashDepositErrorRecordsRepository;
     @Autowired
     private CurrencyRepository currencyRepository;
+    @Autowired
+    private CashDepositBreakDownRepository cashDepositBreakDownRepository;
 
     private ResponseModel responseModel = new ResponseModel();
 
@@ -72,20 +74,24 @@ public class CashDepositServiceImpl implements CashDepositService {
         }
 
         if(currency.get().getCurrency().equals("LKR")) {
-            if (cashDeposit.getValueOf10Notes() != 0 && cashDeposit.getValueOf20Notes() != 0 &&
-                    cashDeposit.getValueOf50Notes() != 0 && cashDeposit.getValueOf100Notes() != 0 &&
-                    cashDeposit.getValueOf500Notes() != 0 && cashDeposit.getValueof1000Notes() != 0 &&
-                    cashDeposit.getValueOf2000Notes() != 0 && cashDeposit.getValueOf2000Notes() != 0) {
-                double sum = (double) (cashDeposit.getValueOf5000Notes() + cashDeposit.getValueOf2000Notes()
-                        + cashDeposit.getValueof1000Notes() + cashDeposit.getValueOf100Notes() +
-                        cashDeposit.getValueOf500Notes() + cashDeposit.getValueOf50Notes() +
-                        cashDeposit.getValueOf20Notes() + cashDeposit.getValueOf10Notes() +
-                        cashDeposit.getValueOfcoins());
-                if (sum != cashDeposit.getTotal()) {
-                    responseModel.setMessage("Incorrect Cash Total");
-                    responseModel.setStatus(false);
-                    return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
-                }
+            if (cashDeposit.getValueOf10Notes() == 0 && cashDeposit.getValueOf20Notes() == 0 &&
+                    cashDeposit.getValueOf50Notes() == 0 && cashDeposit.getValueOf100Notes() == 0 &&
+                    cashDeposit.getValueOf500Notes() == 0 && cashDeposit.getValueof1000Notes() == 0 &&
+                    cashDeposit.getValueOf2000Notes() == 0 && cashDeposit.getValueOf2000Notes() == 0) {
+                responseModel.setMessage("Please fill cash details");
+                responseModel.setStatus(false);
+                return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
+            }
+
+            double sum = (double) (cashDeposit.getValueOf5000Notes() + cashDeposit.getValueOf2000Notes()
+                    + cashDeposit.getValueof1000Notes() + cashDeposit.getValueOf100Notes() +
+                    cashDeposit.getValueOf500Notes() + cashDeposit.getValueOf50Notes() +
+                    cashDeposit.getValueOf20Notes() + cashDeposit.getValueOf10Notes() +
+                    cashDeposit.getValueOfcoins());
+            if (sum != cashDeposit.getTotal()) {
+                responseModel.setMessage("Incorrect Cash Total");
+                responseModel.setStatus(false);
+                return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
             }
         }
         try {
@@ -568,6 +574,36 @@ public class CashDepositServiceImpl implements CashDepositService {
                 cashDepositUpdateRecords.add(updateRecordsDTO);
             }
             return new ResponseEntity<>(cashDepositUpdateRecords, HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> cashDipositBreakdown(int cashDepositId, CashDepositBreakDown breakDown) {
+        Optional<CashDeposit> optional = cashdepositRepositiry.findById(cashDepositId);
+        if(!optional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            Optional<CashDepositBreakDown> breakDownOptional=cashDepositBreakDownRepository.findBreakDown(cashDepositId);
+            if (breakDownOptional.isPresent()){
+                breakDown.setCashDepositBreakDownId(breakDownOptional.get().getCashDepositBreakDownId());
+            }
+            breakDown.setCashDeposit(optional.get());
+            try {
+                breakDown = cashDepositBreakDownRepository.save(breakDown);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+            CashDeposit object = optional.get();
+            object.setCashDepositBreakDown(breakDown);
+
+            try {
+                object = cashdepositRepositiry.save(object);
+                return new ResponseEntity<>(object,HttpStatus.OK);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
         }
     }
 }

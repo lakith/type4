@@ -27,22 +27,19 @@ public class CashDeposit {
     @Pattern(regexp = "^[0-9]*$")
     private String accountNumber;
 
-    @NotNull
-    @NotNull
-    @Size(min = 2)
+
+
     @Pattern(regexp = "^([A-Za-z0-9_\\s])*$")
     private String nameOfDepositor;
 
-    @NotNull
-    @Size(min = 2)
+
     @Pattern(regexp = "^([A-Za-z.,\\s])*$")
     private String address;
 
-    @NotNull
+
     private String identification;
 
-    @NotNull
-    @Size(min = 5)
+
     @Pattern(regexp = "^([A-Za-z.,\\s])*$")
     private String purposeOfDeposit;
 
@@ -86,6 +83,10 @@ public class CashDeposit {
     private String signatureUrl;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cashDepositBreakDownId")
+    CashDepositBreakDown cashDepositBreakDown;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerTransactionRequestId")
     private CustomerTransactionRequest customerTransactionRequest;
 
@@ -100,11 +101,7 @@ public class CashDeposit {
     public CashDeposit() {
     }
 
-    public CashDeposit(@NotNull @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$")
-                               String accountHolderName, @NotNull @Size(min = 6) @Pattern(regexp = "^[0-9]*$")
-            String accountNumber, @NotNull @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String nameOfDepositor, @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z.,\\s])*$") String address, @NotNull String identification,
-                       @NotNull @Size(min = 5) @Pattern(regexp = "^([A-Za-z.,\\s])*$") String purposeOfDeposit,
-                       @NotNull @Size(min = 5) @Pattern(regexp = "^([A-Za-z.,\\s])*$") String ammountInWords, @NotNull @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String phoneNumberAndExtn, @FutureOrPresent Date date, @NotNull Currency currency, int valueOf5000Notes, int valueOf2000Notes, int valueof1000Notes, int valueOf500Notes, int valueOf100Notes, int valueOf50Notes, int valueOf20Notes, int valueOf10Notes, double valueOfcoins, @NotNull double total, String signatureUrl, CustomerTransactionRequest customerTransactionRequest, List<CashDepositFile> cashDepositFiles) {
+    public CashDeposit(@NotNull @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String accountHolderName, @NotNull @Size(min = 6) @Pattern(regexp = "^[0-9]*$") String accountNumber, @NotNull @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String nameOfDepositor, @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z.,\\s])*$") String address, @NotNull String identification, @NotNull @Size(min = 5) @Pattern(regexp = "^([A-Za-z.,\\s])*$") String purposeOfDeposit, @NotNull @Size(min = 5) @Pattern(regexp = "^([A-Za-z.,\\s])*$") String ammountInWords, @NotNull @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String phoneNumberAndExtn, Date date, @NotNull Currency currency, int valueOf5000Notes, int valueOf2000Notes, int valueof1000Notes, int valueOf500Notes, int valueOf100Notes, int valueOf50Notes, int valueOf20Notes, int valueOf10Notes, double valueOfcoins, @NotNull double total, String signatureUrl, CashDepositBreakDown cashDepositBreakDown, CustomerTransactionRequest customerTransactionRequest, List<CashDepositFile> cashDepositFiles, boolean status, Date requestCompleteDate) {
         this.accountHolderName = accountHolderName;
         this.accountNumber = accountNumber;
         this.nameOfDepositor = nameOfDepositor;
@@ -126,8 +123,11 @@ public class CashDeposit {
         this.valueOfcoins = valueOfcoins;
         this.total = total;
         this.signatureUrl = signatureUrl;
+        this.cashDepositBreakDown = cashDepositBreakDown;
         this.customerTransactionRequest = customerTransactionRequest;
         this.cashDepositFiles = cashDepositFiles;
+        this.status = status;
+        this.requestCompleteDate = requestCompleteDate;
     }
 
     public int getCashDepositId() {
@@ -336,5 +336,13 @@ public class CashDeposit {
 
     public void setRequestCompleteDate(Date requestCompleteDate) {
         this.requestCompleteDate = requestCompleteDate;
+    }
+
+    public CashDepositBreakDown getCashDepositBreakDown() {
+        return cashDepositBreakDown;
+    }
+
+    public void setCashDepositBreakDown(CashDepositBreakDown cashDepositBreakDown) {
+        this.cashDepositBreakDown = cashDepositBreakDown;
     }
 }

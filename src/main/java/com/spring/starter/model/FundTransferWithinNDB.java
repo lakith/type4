@@ -34,16 +34,21 @@ public class FundTransferWithinNDB implements Serializable {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "fund_transfer_within_file_id")
     private List<FundTransferWithinNDBFile> fundTransferWithinNDBFiles;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fundTransferWithinNDBBreakDownId")
+    private FundTransferWithinNDBBreakDown FundTransferWithinNDBBreakDown;
 
     public FundTransferWithinNDB() {
     }
 
-    public FundTransferWithinNDB(Date date, long fromAccount, String fromAccountType, Currency currency, double amount, long toAccount, Date requestCompleteDate, boolean status, String signatureUrl, Branch branch, CustomerTransactionRequest customerTransactionRequest, List<FundTransferWithinNDBFile> fundTransferWithinNDBFiles) {
+    public FundTransferWithinNDB(Date date, String fromAccountName, long fromAccount, String fromAccountType, Currency currency, double amount, String toAccountName, long toAccount, Date requestCompleteDate, boolean status, String signatureUrl, Branch branch, CustomerTransactionRequest customerTransactionRequest, List<FundTransferWithinNDBFile> fundTransferWithinNDBFiles, com.spring.starter.model.FundTransferWithinNDBBreakDown fundTransferWithinNDBBreakDown) {
         this.date = date;
+        this.fromAccountName = fromAccountName;
         this.fromAccount = fromAccount;
         this.fromAccountType = fromAccountType;
         this.currency = currency;
         this.amount = amount;
+        this.toAccountName = toAccountName;
         this.toAccount = toAccount;
         this.requestCompleteDate = requestCompleteDate;
         this.status = status;
@@ -51,6 +56,7 @@ public class FundTransferWithinNDB implements Serializable {
         this.branch = branch;
         this.customerTransactionRequest = customerTransactionRequest;
         this.fundTransferWithinNDBFiles = fundTransferWithinNDBFiles;
+        FundTransferWithinNDBBreakDown = fundTransferWithinNDBBreakDown;
     }
 
     public int getFundTransferWithinNdbId() {
@@ -171,5 +177,13 @@ public class FundTransferWithinNDB implements Serializable {
 
     public void setToAccountName(String toAccountName) {
         this.toAccountName = toAccountName;
+    }
+
+    public com.spring.starter.model.FundTransferWithinNDBBreakDown getFundTransferWithinNDBBreakDown() {
+        return FundTransferWithinNDBBreakDown;
+    }
+
+    public void setFundTransferWithinNDBBreakDown(com.spring.starter.model.FundTransferWithinNDBBreakDown fundTransferWithinNDBBreakDown) {
+        FundTransferWithinNDBBreakDown = fundTransferWithinNDBBreakDown;
     }
 }

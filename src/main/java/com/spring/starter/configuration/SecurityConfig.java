@@ -135,6 +135,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/Transaction-Request/cash-deposit/file-upload").permitAll()
                 .antMatchers("/Transaction-Request/cash-deposit/update").permitAll()
                 .antMatchers("/Transaction-Request/cash-deposit/signature").permitAll()
+                .antMatchers("/Transaction-Request/cash-deposit-denominations").permitAll()
                 .antMatchers("/Bank/save").permitAll()
                 .antMatchers("/Bank/update").permitAll()
                 .antMatchers("/Bank/delete/**").permitAll()
@@ -175,6 +176,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/Teller-Queue/continue-a-hold-token").permitAll()
                 .antMatchers("/Teller-Queue/genarate-an-special-queue-number").permitAll()
                 .antMatchers("/Teller-Queue/genarate-redundent-token").permitAll()
+                .antMatchers("/reports/daily-report").permitAll()
                 .anyRequest().authenticated();
     }
 }

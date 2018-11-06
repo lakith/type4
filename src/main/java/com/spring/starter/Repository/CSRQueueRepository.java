@@ -24,6 +24,9 @@ public interface CSRQueueRepository extends JpaRepository<CSRQueue,Integer> {
     @Query("SELECT c FROM CSRQueue c WHERE c.customer.customerId=?1")
     public Optional<CSRQueue> getCSRQueueByCustomerId(int customerID);
 
+    @Query("SELECT c.queueNumber FROM CSRQueue c WHERE c.customer.customerId=?1")
+    public String getCSRQueueNumberByCustomerId(int customerID);
+
     @Query("SELECT c FROM CSRQueue c WHERE c.hold = true and c.complete=false ORDER BY c.queueNumIdentification")
     public List<CSRQueue> getholdQueue();
 

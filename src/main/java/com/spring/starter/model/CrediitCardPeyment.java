@@ -70,31 +70,36 @@ public class CrediitCardPeyment {
         @JoinColumn(name = "customerTransactionRequestId")
         private CustomerTransactionRequest customerTransactionRequest;
 
-        public CrediitCardPeyment(@NotNull @NotEmpty @Size(min = 9, max = 10, message = "mobile number must be between 9 and 10") @Pattern(regexp = "^([+0-9])*$") String telephoneNumber, @NotNull @Pattern(regexp = "^(CASH|CHEQUE)$") String paymenntMethod, Bank bank, Branch branch, String chequenumber, double ammount, Date date, int valueOf5000Notes, int valueOf2000Notes, int valueof1000Notes, int valueOf500Notes, int valueOf100Notes, int valueOf50Notes, int valueOf20Notes, int valueOf10Notes, double valueOfcoins, @NotNull double total, String signatureUrl, Date requestCompleteDate, boolean status, CustomerTransactionRequest customerTransactionRequest) {
-            this.telephoneNumber = telephoneNumber;
-            this.paymenntMethod = paymenntMethod;
-            this.bank = bank;
-            this.branch = branch;
-            this.chequenumber = chequenumber;
-            this.ammount = ammount;
-            this.date = date;
-            this.valueOf5000Notes = valueOf5000Notes;
-            this.valueOf2000Notes = valueOf2000Notes;
-            this.valueof1000Notes = valueof1000Notes;
-            this.valueOf500Notes = valueOf500Notes;
-            this.valueOf100Notes = valueOf100Notes;
-            this.valueOf50Notes = valueOf50Notes;
-            this.valueOf20Notes = valueOf20Notes;
-            this.valueOf10Notes = valueOf10Notes;
-            this.valueOfcoins = valueOfcoins;
-            this.total = total;
-            this.signatureUrl = signatureUrl;
-            this.requestCompleteDate = requestCompleteDate;
-            this.status = status;
-            this.customerTransactionRequest = customerTransactionRequest;
-        }
+        @OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "creditCardPaymentBreakDownId")
+        private CreditCardPaymentBreakDown creditCardPaymentBreakDown;
 
-        public CrediitCardPeyment() {
+    public CrediitCardPeyment(@NotNull @NotEmpty @Size(min = 9, max = 10, message = "mobile number must be between 9 and 10") @Pattern(regexp = "^([+0-9])*$") String telephoneNumber, @NotNull @Pattern(regexp = "^(CASH|CHEQUE)$") String paymenntMethod, Bank bank, Branch branch, String chequenumber, double ammount, Date date, int valueOf5000Notes, int valueOf2000Notes, int valueof1000Notes, int valueOf500Notes, int valueOf100Notes, int valueOf50Notes, int valueOf20Notes, int valueOf10Notes, double valueOfcoins, @NotNull double total, String signatureUrl, Date requestCompleteDate, boolean status, CustomerTransactionRequest customerTransactionRequest, CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
+        this.telephoneNumber = telephoneNumber;
+        this.paymenntMethod = paymenntMethod;
+        this.bank = bank;
+        this.branch = branch;
+        this.chequenumber = chequenumber;
+        this.ammount = ammount;
+        this.date = date;
+        this.valueOf5000Notes = valueOf5000Notes;
+        this.valueOf2000Notes = valueOf2000Notes;
+        this.valueof1000Notes = valueof1000Notes;
+        this.valueOf500Notes = valueOf500Notes;
+        this.valueOf100Notes = valueOf100Notes;
+        this.valueOf50Notes = valueOf50Notes;
+        this.valueOf20Notes = valueOf20Notes;
+        this.valueOf10Notes = valueOf10Notes;
+        this.valueOfcoins = valueOfcoins;
+        this.total = total;
+        this.signatureUrl = signatureUrl;
+        this.requestCompleteDate = requestCompleteDate;
+        this.status = status;
+        this.customerTransactionRequest = customerTransactionRequest;
+        this.creditCardPaymentBreakDown = creditCardPaymentBreakDown;
+    }
+
+    public CrediitCardPeyment() {
         }
 
     public int getCrediitCardPeymentId() {
@@ -271,5 +276,13 @@ public class CrediitCardPeyment {
 
     public void setCustomerTransactionRequest(CustomerTransactionRequest customerTransactionRequest) {
         this.customerTransactionRequest = customerTransactionRequest;
+    }
+
+    public CreditCardPaymentBreakDown getCreditCardPaymentBreakDown() {
+        return creditCardPaymentBreakDown;
+    }
+
+    public void setCreditCardPaymentBreakDown(CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
+        this.creditCardPaymentBreakDown = creditCardPaymentBreakDown;
     }
 }

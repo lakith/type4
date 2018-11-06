@@ -3,7 +3,9 @@ package com.spring.starter.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.starter.DTO.DetailsUpdateDTO;
 import com.spring.starter.model.FundTransferCEFT;
+import com.spring.starter.model.FundTransferCEFTBreakDown;
 import com.spring.starter.model.FundTransferSLIPS;
+import com.spring.starter.model.FundTransferSLIPSBreakDown;
 import com.spring.starter.service.FundTransferCEFTService;
 import com.spring.starter.service.FundTransferSLIPService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +72,11 @@ public class FundTransferSLIPController {
     @GetMapping("/fund-transfer-slip-update-records")
     public ResponseEntity<?> getBillPaymentUpdateRecords(@RequestParam(name="requestId") int requestId) {
         return fundTransferSLIPService.getSLIPUpdateRecords(requestId);
+    }
+
+    @PostMapping("/fund-transfer-slip-denominations")
+    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,FundTransferSLIPSBreakDown breakDown){
+        return  fundTransferSLIPService.fundtransferSLIPBreakdown(requestId,breakDown);
     }
 
 }

@@ -48,6 +48,8 @@ public class FundTransferSLIPServiceImpl implements FundTransferSLIPService {
     private FundTransferSLIPSErrorRecordsRepository fundTransferSLIPSErrorRecordsRepository;
     @Autowired
     private FundTransferSLIPSUpdateRecordRepository fundTransferSLIPSUpdateRecordRepository;
+    @Autowired
+    private FundTransferSLIPSBreakDownRepository fundTransferSLIPSBreakDownRepository;
 
     private ResponseModel responseModel = new ResponseModel();
 
@@ -304,6 +306,36 @@ public class FundTransferSLIPServiceImpl implements FundTransferSLIPService {
                 fundTransferSLIPSUpdateRecords.add(updateRecordsDTO);
             }
             return new ResponseEntity<>(fundTransferSLIPSUpdateRecords, HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> fundtransferSLIPBreakdown(int fundTransferSLIPSId, FundTransferSLIPSBreakDown breakDown) {
+        Optional<FundTransferSLIPS> optional = fundTransferSLIPRepository.findById(fundTransferSLIPSId);
+        if(!optional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            Optional<FundTransferSLIPSBreakDown> breakDownOptional=fundTransferSLIPSBreakDownRepository.findBreakDown(fundTransferSLIPSId);
+            if (breakDownOptional.isPresent()){
+                breakDown.setFundTransferSLIPSBreakDownId(breakDownOptional.get().getFundTransferSLIPSBreakDownId());
+            }
+            breakDown.setFundTransferSLIPS(optional.get());
+            try {
+                breakDown = fundTransferSLIPSBreakDownRepository.save(breakDown);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+            FundTransferSLIPS object = optional.get();
+            object.setFundTransferSLIPSBreakDown(breakDown);
+
+            try {
+                object = fundTransferSLIPRepository.save(object);
+                return new ResponseEntity<>(object,HttpStatus.OK);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
         }
     }
 

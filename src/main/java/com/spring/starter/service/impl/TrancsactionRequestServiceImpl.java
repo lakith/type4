@@ -1,7 +1,6 @@
 package com.spring.starter.service.impl;
 
 import com.spring.starter.DTO.AuthorizeDTO;
-import com.spring.starter.DTO.SendAuthorizeDTO;
 import com.spring.starter.DTO.TTNumberDTO;
 import com.spring.starter.Exception.CustomException;
 import com.spring.starter.Repository.*;
@@ -65,9 +64,6 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
 
     @Autowired
     private CSRDataTransactionRepository csrtransactionRepository;
-
-    @Autowired
-    private TellerQueueRepository tellerQueueRepository;
 
     @Override
     public ResponseEntity<?> addNewServiceRequest(TransactionRequest transactionRequest) {
@@ -386,24 +382,12 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         }
     }
 
-    @Override
     public ResponseEntity<?> getAllCustomerTransactionRequests(){
         List<CustomerTransactionRequest> transactionRequestList = customerTransactionRequestRepository.getAllAuthorizeRequests();
         if(transactionRequestList.isEmpty()){
             return new ResponseEntity<>(new ResponseModel("There are no authorize Requests",false),HttpStatus.NO_CONTENT);
         } else {
-            List<SendAuthorizeDTO> sendAuthorizeDTOS = new ArrayList<>();
-            for(CustomerTransactionRequest request : transactionRequestList){
-                Optional<TellerQueue> optionalQueue = tellerQueueRepository.getTellerQueueByCustomerId(request.getTransactionCustomer().getTransactionCustomerId());
-                if(!optionalQueue.isPresent()){
-                    continue;
-                }
-                SendAuthorizeDTO sendAuthorizeDTO = new SendAuthorizeDTO();
-                sendAuthorizeDTO.setCustomerTransactionRequest(request);
-                sendAuthorizeDTO.setTellerQueue(optionalQueue.get());
-                sendAuthorizeDTOS.add(sendAuthorizeDTO);
-            }
-            return new ResponseEntity<>(sendAuthorizeDTOS,HttpStatus.OK);
+            return new ResponseEntity<>(transactionRequestList,HttpStatus.OK);
         }
     }
 
@@ -412,20 +396,7 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         if(customerTransactionRequests.isEmpty()){
             return new ResponseEntity<>(new ResponseModel("There are no Authorize Requests", false),HttpStatus.NO_CONTENT);
         } else {
-
-            List<SendAuthorizeDTO> sendAuthorizeDTOS = new ArrayList<>();
-            for(CustomerTransactionRequest request : customerTransactionRequests){
-                Optional<TellerQueue> optionalQueue = tellerQueueRepository.getTellerQueueByCustomerId(customerId);
-                if(!optionalQueue.isPresent()){
-                    continue;
-                }
-                SendAuthorizeDTO sendAuthorizeDTO = new SendAuthorizeDTO();
-                sendAuthorizeDTO.setCustomerTransactionRequest(request);
-                sendAuthorizeDTO.setTellerQueue(optionalQueue.get());
-                sendAuthorizeDTOS.add(sendAuthorizeDTO);
-            }
-
-            return new ResponseEntity<>(sendAuthorizeDTOS,HttpStatus.OK);
+            return new ResponseEntity<>(customerTransactionRequests,HttpStatus.OK);
         }
     }
 
@@ -511,9 +482,8 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         } catch (Exception e){
             throw new CustomException(e.getMessage());
         }
-
-
     }
+
 
     public ResponseEntity<?> addAuthorizeDataToATransaction(AuthorizerDataTransaction authorizerDataTransaction, Principal principal, int requestId){
 
@@ -522,9 +492,9 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         CustomerTransactionRequest customerTransactionRequest = new CustomerTransactionRequest();
         if(!staffUser.isPresent()){
             return new ResponseEntity<>(new ResponseModel("There is no kinda user in the database",false),HttpStatus.BAD_REQUEST);
-        } else if (staffUser.get().getStaffRole().getRoleType() != "AUTHORIZER"){
+        } /*else if (staffUser.get().getStaffRole().getRoleType() != "ROLE_AUTHORIZER"){
             return new ResponseEntity<>(new ResponseModel("You cannot Authorize this request",false),HttpStatus.FORBIDDEN);
-        } else if (!optionalCustomerTransactionRequest.isPresent()){
+        } */else if (!optionalCustomerTransactionRequest.isPresent()){
             return new ResponseEntity<>(new ResponseModel("Invalied Customer Transaction Request",false),HttpStatus.BAD_REQUEST);
         }
         customerTransactionRequest = optionalCustomerTransactionRequest.get();
