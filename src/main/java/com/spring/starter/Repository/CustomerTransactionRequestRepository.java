@@ -16,9 +16,6 @@ public interface CustomerTransactionRequestRepository extends JpaRepository<Cust
     @Query("SELECT cs FROM CustomerTransactionRequest cs WHERE cs.transactionCustomer.transactionCustomerId = ?1 AND date(cs.requestDate)=?2")
     List<CustomerTransactionRequest> getAllTransactionCustomerRequestsFilterBudate(int customerId, Date date);
 
-    @Query("SELECT cs FROM CustomerTransactionRequest cs WHERE date(cs.requestDate)=?1")
-    List<CustomerTransactionRequest> getAllTransactionCustomerRequestsByDate(Date date);
-
     @Query("SELECT ctr FROM CustomerTransactionRequest ctr WHERE date(ctr.requestDate) =:date AND ctr.status = false")
     List<CustomerTransactionRequest> getAllUncompleteRequests(@Param("date") Date date);
 

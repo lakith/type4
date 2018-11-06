@@ -1,6 +1,7 @@
 package com.spring.starter.service.impl;
 
 import com.spring.starter.DTO.AuthorizeDTO;
+import com.spring.starter.DTO.SendAuthorizeDTO;
 import com.spring.starter.DTO.TTNumberDTO;
 import com.spring.starter.Exception.CustomException;
 import com.spring.starter.Repository.*;
@@ -64,6 +65,9 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
 
     @Autowired
     private CSRDataTransactionRepository csrtransactionRepository;
+
+    @Autowired
+    private TellerQueueRepository tellerQueueRepository;
 
     @Override
     public ResponseEntity<?> addNewServiceRequest(TransactionRequest transactionRequest) {
@@ -382,12 +386,24 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         }
     }
 
+    @Override
     public ResponseEntity<?> getAllCustomerTransactionRequests(){
         List<CustomerTransactionRequest> transactionRequestList = customerTransactionRequestRepository.getAllAuthorizeRequests();
         if(transactionRequestList.isEmpty()){
             return new ResponseEntity<>(new ResponseModel("There are no authorize Requests",false),HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(transactionRequestList,HttpStatus.OK);
+            List<SendAuthorizeDTO> sendAuthorizeDTOS = new ArrayList<>();
+            for(CustomerTransactionRequest request : transactionRequestList){
+                Optional<TellerQueue> optionalQueue = tellerQueueRepository.getTellerQueueByCustomerId(request.getTransactionCustomer().getTransactionCustomerId());
+                if(!optionalQueue.isPresent()){
+                    continue;
+                }
+                SendAuthorizeDTO sendAuthorizeDTO = new SendAuthorizeDTO();
+                sendAuthorizeDTO.setCustomerTransactionRequest(request);
+                sendAuthorizeDTO.setTellerQueue(optionalQueue.get());
+                sendAuthorizeDTOS.add(sendAuthorizeDTO);
+            }
+            return new ResponseEntity<>(sendAuthorizeDTOS,HttpStatus.OK);
         }
     }
 
@@ -396,7 +412,20 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         if(customerTransactionRequests.isEmpty()){
             return new ResponseEntity<>(new ResponseModel("There are no Authorize Requests", false),HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(customerTransactionRequests,HttpStatus.OK);
+
+            List<SendAuthorizeDTO> sendAuthorizeDTOS = new ArrayList<>();
+            for(CustomerTransactionRequest request : customerTransactionRequests){
+                Optional<TellerQueue> optionalQueue = tellerQueueRepository.getTellerQueueByCustomerId(customerId);
+                if(!optionalQueue.isPresent()){
+                    continue;
+                }
+                SendAuthorizeDTO sendAuthorizeDTO = new SendAuthorizeDTO();
+                sendAuthorizeDTO.setCustomerTransactionRequest(request);
+                sendAuthorizeDTO.setTellerQueue(optionalQueue.get());
+                sendAuthorizeDTOS.add(sendAuthorizeDTO);
+            }
+
+            return new ResponseEntity<>(sendAuthorizeDTOS,HttpStatus.OK);
         }
     }
 
@@ -485,7 +514,6 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
 
 
     }
-
 
     public ResponseEntity<?> addAuthorizeDataToATransaction(AuthorizerDataTransaction authorizerDataTransaction, Principal principal, int requestId){
 
