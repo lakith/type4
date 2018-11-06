@@ -61,11 +61,13 @@ public class PdfServiceImpl implements PdfService {
                 dto.setDigFormType(request.getTransactionRequest().getDigiFormType());
                 dto.setIdentification(request.getTransactionCustomer().getIdentification());
                 dto.setRequestCompleteDate(request.getRequestCompleteDate());
-                if(request.getAuthorizerDataTransaction().getStaffUser() == null){
+                if (request.getStaffUser().isEmpty()){
                     continue;
+                }else{
+                    int size=request.getStaffUser().size();
+                    dto.setEpfNumber(request.getStaffUser().get(size-1).getEpfNumber());
+                    dto.setStaffName(request.getStaffUser().get(size-1).getName());
                 }
-                dto.setEpfNumber(request.getAuthorizerDataTransaction().getStaffUser().getEpfNumber());
-                dto.setStaffName(request.getAuthorizerDataTransaction().getStaffUser().getName());
                 dto.setQueueNumber(csrQueueRepository.getCSRQueueNumberByCustomerId(request.getCustomerTransactionRequestId()));
 
                 dtoList.add(dto);
@@ -75,7 +77,8 @@ public class PdfServiceImpl implements PdfService {
             ByteArrayInputStream bis = DailyReport.report(dtoList);
 
             try {
-                IOUtils.copy(bis, new FileOutputStream("Daily Report OF "+date+""));
+
+                System.out.println(IOUtils.copy(bis, new FileOutputStream("File Storage/Daily Report OF.pdf")));
 
             } catch (IOException e) {
                 e.printStackTrace();
