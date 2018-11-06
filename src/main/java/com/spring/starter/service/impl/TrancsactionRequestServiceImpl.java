@@ -59,6 +59,11 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
     @Autowired
     private CreditCardPeymentRepository creditCardPeymentRepository;
 
+    @Autowired
+    private AuthorizerDataTransactionRepository authorizerDataTransactionRepository;
+
+    @Autowired
+    private CSRDataTransactionRepository csrtransactionRepository;
 
     @Override
     public ResponseEntity<?> addNewServiceRequest(TransactionRequest transactionRequest) {
@@ -76,6 +81,15 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         responseModel.setStatus(true);
 
         return new ResponseEntity<>(transactionRequest,HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<?> viewATransactionRequest(int requestId){
+        Optional<CustomerTransactionRequest> customerTransactionRequest = customerTransactionRequestRepository.findById(requestId);
+        if(!customerTransactionRequest.isPresent()){
+            return new ResponseEntity<>(customerTransactionRequest,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResponseModel("No record Present",false),HttpStatus.NO_CONTENT);
+        }
     }
 
     @Override
@@ -431,7 +445,72 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         }
     }
 
-        @Override
+    public ResponseEntity<?> addCSRAuthorizeDataToATransaction(CSRDataTransaction csrDataTransaction , Principal principal, int requestId){
+        Optional<StaffUser> staffUser = staffUserRepository.findById(Integer.parseInt(principal.getName()));
+        Optional<CustomerTransactionRequest> optionalCustomerTransactionRequest = customerTransactionRequestRepository.findById(requestId);
+        CustomerTransactionRequest customerTransactionRequest = new CustomerTransactionRequest();
+        List<CSRDataTransaction> dataTransactionList = new ArrayList<>();
+        if(!staffUser.isPresent()){
+            return new ResponseEntity<>(new ResponseModel("There is no kinda user in the database.",false),HttpStatus.BAD_REQUEST);
+        } else if (!optionalCustomerTransactionRequest.isPresent()){
+            return new ResponseEntity<>(new ResponseModel("Invalid Customer Transaction Request",false),HttpStatus.BAD_REQUEST);
+        }
+        customerTransactionRequest = optionalCustomerTransactionRequest.get();
+        if(!customerTransactionRequest.getCsrDataTransaction().isEmpty()){
+            dataTransactionList = customerTransactionRequest.getCsrDataTransaction();
+        }
+        csrDataTransaction.setStaffUser(staffUser.get());
+        csrDataTransaction.setCustomerTransactionRequest(customerTransactionRequest);
+        csrDataTransaction.setDate(java.util.Calendar.getInstance().getTime());
+        try{
+            csrDataTransaction = csrtransactionRepository.save(csrDataTransaction);
+            dataTransactionList.add(csrDataTransaction);
+            customerTransactionRequest.setCsrDataTransaction(dataTransactionList);
+            customerTransactionRequest = customerTransactionRequestRepository.save(customerTransactionRequest);
+            return new ResponseEntity<>(customerTransactionRequest,HttpStatus.OK);
+        } catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }
+
+
+    }
+
+
+    public ResponseEntity<?> addAuthorizeDataToATransaction(AuthorizerDataTransaction authorizerDataTransaction, Principal principal, int requestId){
+
+        Optional<StaffUser> staffUser = staffUserRepository.findById(Integer.parseInt(principal.getName()));
+        Optional<CustomerTransactionRequest> optionalCustomerTransactionRequest = customerTransactionRequestRepository.findById(requestId);
+        CustomerTransactionRequest customerTransactionRequest = new CustomerTransactionRequest();
+        if(!staffUser.isPresent()){
+            return new ResponseEntity<>(new ResponseModel("There is no kinda user in the database",false),HttpStatus.BAD_REQUEST);
+        } else if (staffUser.get().getStaffRole().getRoleType() != "AUTHORIZER"){
+            return new ResponseEntity<>(new ResponseModel("You cannot Authorize this request",false),HttpStatus.FORBIDDEN);
+        } else if (!optionalCustomerTransactionRequest.isPresent()){
+            return new ResponseEntity<>(new ResponseModel("Invalied Customer Transaction Request",false),HttpStatus.BAD_REQUEST);
+        }
+        customerTransactionRequest = optionalCustomerTransactionRequest.get();
+        if(!customerTransactionRequest.isAuthorize()){
+            optionalCustomerTransactionRequest.get().setAuthorize(true);
+            customerTransactionRequest = customerTransactionRequestRepository.save(customerTransactionRequest);
+        }
+        if(customerTransactionRequest.getAuthorizerDataTransaction() != null){
+            authorizerDataTransaction.setAuthorizerDataTransactio(customerTransactionRequest.getAuthorizerDataTransaction().getAuthorizerDataTransactio());
+        }
+        authorizerDataTransaction.setStaffUser(staffUser.get());
+        authorizerDataTransaction.setAuthoritiesComplete(true);
+        authorizerDataTransaction.setCustomerTransactionRequest(customerTransactionRequest);
+        try {
+            authorizerDataTransaction = authorizerDataTransactionRepository.save(authorizerDataTransaction);
+            customerTransactionRequest.setAuthorizerDataTransaction(authorizerDataTransaction);
+            customerTransactionRequest = customerTransactionRequestRepository.save(customerTransactionRequest);
+            return new ResponseEntity<>(customerTransactionRequest,HttpStatus.CREATED);
+        } catch (Exception e){
+            throw new CustomException( e.getMessage());
+        }
+    }
+
+
+    @Override
     public ResponseEntity<?> completeTransactionRequest(int transactionCustomerRequest, Principal principal) {
         ResponseModel responseModel = new ResponseModel();
         Optional<CustomerTransactionRequest> customerTransactionRequest = customerTransactionRequestRepository

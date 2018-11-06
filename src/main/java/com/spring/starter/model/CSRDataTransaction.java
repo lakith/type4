@@ -1,6 +1,9 @@
 package com.spring.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "csr_data_transaction")
@@ -17,6 +20,13 @@ public class CSRDataTransaction {
     private String status;
 
     private String comment;
+
+    private Date date;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customerTransactionRequestId")
+    @JsonIgnore
+    private CustomerTransactionRequest customerTransactionRequest;
 
     public CSRDataTransaction() {
     }
@@ -55,7 +65,23 @@ public class CSRDataTransaction {
         return comment;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public CustomerTransactionRequest getCustomerTransactionRequest() {
+        return customerTransactionRequest;
+    }
+
+    public void setCustomerTransactionRequest(CustomerTransactionRequest customerTransactionRequest) {
+        this.customerTransactionRequest = customerTransactionRequest;
     }
 }

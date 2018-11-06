@@ -3,6 +3,8 @@ package com.spring.starter.service;
 
 import com.spring.starter.DTO.AuthorizeDTO;
 import com.spring.starter.DTO.TTNumberDTO;
+import com.spring.starter.model.AuthorizerDataTransaction;
+import com.spring.starter.model.CSRDataTransaction;
 import com.spring.starter.model.TransactionCustomer;
 import com.spring.starter.model.TransactionRequest;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ public interface TrancsactionRequestService {
     public ResponseEntity<?> getAllTransactionCustomerDetails();
 
     public ResponseEntity<?> getOneCustomerDetails(int id);
+
+    public ResponseEntity<?> viewATransactionRequest(int requestId);
 
     public ResponseEntity<?> getCustomerDetailsFormIndentity(String identity);
 
@@ -52,6 +56,10 @@ public interface TrancsactionRequestService {
     public ResponseEntity<?> transactionRequestSaveAuthorizeStatus(int requestId, AuthorizeDTO authorizeDTO);
 
     public ResponseEntity<?> transactionRequestSaveTTNumber(int requestId, TTNumberDTO numberDTO);
+
+    public ResponseEntity<?> addAuthorizeDataToATransaction(AuthorizerDataTransaction authorizerDataTransaction, Principal principal, int requestId);
+
+    public ResponseEntity<?> addCSRAuthorizeDataToATransaction(CSRDataTransaction csrDataTransaction , Principal principal, int requestId);
 
 
 

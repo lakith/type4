@@ -1,6 +1,9 @@
 package com.spring.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "authorizer_data_transaction")
@@ -10,13 +13,22 @@ public class AuthorizerDataTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int authorizerDataTransactio;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staffUserId")
     private StaffUser staffUser;
 
+    @NotNull
     private String status;
 
+    @NotNull
     private String comment;
+
+    private boolean authoritiesComplete;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customerTransactionRequestId")
+    @JsonIgnore
+    private CustomerTransactionRequest customerTransactionRequest;
 
     public AuthorizerDataTransaction() {
     }
@@ -57,5 +69,21 @@ public class AuthorizerDataTransaction {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public boolean isAuthoritiesComplete() {
+        return authoritiesComplete;
+    }
+
+    public CustomerTransactionRequest getCustomerTransactionRequest() {
+        return customerTransactionRequest;
+    }
+
+    public void setCustomerTransactionRequest(CustomerTransactionRequest customerTransactionRequest) {
+        this.customerTransactionRequest = customerTransactionRequest;
+    }
+
+    public void setAuthoritiesComplete(boolean authoritiesComplete) {
+        this.authoritiesComplete = authoritiesComplete;
     }
 }

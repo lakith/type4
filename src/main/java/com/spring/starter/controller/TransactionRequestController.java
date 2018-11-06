@@ -3,6 +3,8 @@ package com.spring.starter.controller;
 import com.spring.starter.DTO.AuthorizeDTO;
 import com.spring.starter.DTO.CustomerTransactionDTO;
 import com.spring.starter.DTO.TTNumberDTO;
+import com.spring.starter.model.AuthorizerDataTransaction;
+import com.spring.starter.model.CSRDataTransaction;
 import com.spring.starter.model.TransactionCustomer;
 import com.spring.starter.model.TransactionRequest;
 import com.spring.starter.service.TrancsactionRequestService;
@@ -94,6 +96,11 @@ public class TransactionRequestController {
         return trancsactionRequestService.getAllUncompleteRequests(date);
     }
 
+    @GetMapping("/view-transaction-request")
+    public ResponseEntity<?> viewTransactionRequest(@RequestParam("requestId") int requestId){
+        return trancsactionRequestService.viewATransactionRequest(requestId);
+    }
+
     @GetMapping("/get-All-Authorize-Requests")
     public ResponseEntity<?> getAllAuthoriseRequestsBydate(){
         return trancsactionRequestService.getAllCustomerTransactionRequests();
@@ -122,6 +129,16 @@ public class TransactionRequestController {
     @GetMapping("/set-Soft-reject")
     public ResponseEntity<?> setSoftReject(@RequestParam("RequestId") int requestId){
         return trancsactionRequestService.transactionRequestsetsoftReject(requestId);
+    }
+
+    @PostMapping("/setAuthorizeData")
+    public ResponseEntity<?> setAuthorizeData(@RequestBody AuthorizerDataTransaction authorizerDataTransaction,Principal principal,@RequestParam("requestId") int requestId){
+        return trancsactionRequestService.addAuthorizeDataToATransaction(authorizerDataTransaction,principal,requestId);
+    }
+
+    @PostMapping("/set-csr-data")
+    public ResponseEntity<?> addCSRAuthorizeDataToATransaction(@RequestBody CSRDataTransaction csrDataTransaction,@RequestParam("requestId") int requestId,Principal principal) {
+        return trancsactionRequestService.addCSRAuthorizeDataToATransaction(csrDataTransaction,principal,requestId);
     }
 
     @GetMapping("complete-a-transaction-request")
