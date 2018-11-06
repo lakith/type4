@@ -25,5 +25,7 @@ public interface CustomerServiceRequestRepository extends JpaRepository<Customer
 	@Query("SELECT cs FROM CustomerServiceRequest cs WHERE cs.softReject= true and date(cs.requestDate) =?1")
 	List<CustomerServiceRequest> getAllSoftRejectRequestsByDate(Date date);
 
+	@Query("SELECT cs FROM CustomerServiceRequest cs WHERE cs.customer.customerId=?1 and cs.status =false")
+	List<CustomerServiceRequest> getAllUncompleteRequests(int customerId);
 	
 }

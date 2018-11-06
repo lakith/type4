@@ -4,6 +4,7 @@ import com.spring.starter.DTO.CashWithdrawalDTO;
 import com.spring.starter.DTO.FileDTO;
 import com.spring.starter.DTO.DetailsUpdateDTO;
 import com.spring.starter.DTO.TransactionSignatureDTO;
+import com.spring.starter.model.CashWithDrawalBreakDown;
 import org.springframework.http.ResponseEntity;
 
 public interface CashWithdrawalService {
@@ -18,5 +19,7 @@ public interface CashWithdrawalService {
                    int customerTransactionRequestId, DetailsUpdateDTO detailsUpdateDTO) throws Exception;
 
     public ResponseEntity<?> getCashWithdrawalUpdateRecords(int requestId);
+
+    public ResponseEntity<?> cashWithdrawalBreakdown(int cashwithdrawalID,CashWithDrawalBreakDown cashWithDrawalBreakDown);
 
     }

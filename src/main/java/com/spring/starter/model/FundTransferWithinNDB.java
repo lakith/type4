@@ -13,10 +13,14 @@ public class FundTransferWithinNDB implements Serializable {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private int fundTransferWithinNdbId;
     private Date date;
+    private String fromAccountName;
     private long fromAccount;
     private String fromAccountType;
-    private String currency;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "currencyId")
+    private Currency currency;
     private double amount;
+    private String toAccountName;
     private long toAccount;
     private Date requestCompleteDate;
     private boolean status;
@@ -34,13 +38,15 @@ public class FundTransferWithinNDB implements Serializable {
     public FundTransferWithinNDB() {
     }
 
-    public FundTransferWithinNDB(Date date, long fromAccount, String fromAccountType, String currency, double amount, long toAccount, String signatureUrl, Branch branch, CustomerTransactionRequest customerTransactionRequest, List<FundTransferWithinNDBFile> fundTransferWithinNDBFiles) {
+    public FundTransferWithinNDB(Date date, long fromAccount, String fromAccountType, Currency currency, double amount, long toAccount, Date requestCompleteDate, boolean status, String signatureUrl, Branch branch, CustomerTransactionRequest customerTransactionRequest, List<FundTransferWithinNDBFile> fundTransferWithinNDBFiles) {
         this.date = date;
         this.fromAccount = fromAccount;
         this.fromAccountType = fromAccountType;
         this.currency = currency;
         this.amount = amount;
         this.toAccount = toAccount;
+        this.requestCompleteDate = requestCompleteDate;
+        this.status = status;
         this.signatureUrl = signatureUrl;
         this.branch = branch;
         this.customerTransactionRequest = customerTransactionRequest;
@@ -79,11 +85,11 @@ public class FundTransferWithinNDB implements Serializable {
         this.fromAccountType = fromAccountType;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
@@ -149,5 +155,21 @@ public class FundTransferWithinNDB implements Serializable {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getFromAccountName() {
+        return fromAccountName;
+    }
+
+    public void setFromAccountName(String fromAccountName) {
+        this.fromAccountName = fromAccountName;
+    }
+
+    public String getToAccountName() {
+        return toAccountName;
+    }
+
+    public void setToAccountName(String toAccountName) {
+        this.toAccountName = toAccountName;
     }
 }

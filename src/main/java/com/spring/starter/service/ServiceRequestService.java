@@ -64,4 +64,7 @@ public interface ServiceRequestService {
 
     public ResponseEntity<?> sendTOAuthorizer(int requestId) throws Exception;
 
+    public ResponseEntity<?> getUncompletedRequests(int customerId);
+
+
 }

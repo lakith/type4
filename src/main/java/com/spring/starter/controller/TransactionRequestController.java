@@ -147,4 +147,9 @@ public class TransactionRequestController {
         return trancsactionRequestService.completeTransactionRequest(requestId,principal);
     }
 
+    @GetMapping("/get-uncomplted-reqests")
+    public ResponseEntity<?> getUncompletedRequests(@RequestParam(name = "customerServiceRequestId") int customerServiceRequestId){
+        return trancsactionRequestService.getUncompletedRequests(customerServiceRequestId);
+    }
+
 }

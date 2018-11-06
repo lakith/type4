@@ -1,5 +1,7 @@
 package com.spring.starter.service.impl;
 
+import com.spring.starter.DTO.CSRDisplayDTO;
+import com.spring.starter.DTO.TellerDisplayDTO;
 import com.spring.starter.DTO.TellerQueueDTO;
 import com.spring.starter.Inherite.DefaultResponnsesQueue;
 import com.spring.starter.Repository.TellerQueueRepository;
@@ -60,7 +62,21 @@ public class TellerQueueServiceImpl extends DefaultResponnsesQueue implements Te
 
         try {
             tellerQueue = tellerQueueRepository.save(tellerQueue);
-            return new ResponseEntity<>(tellerQueue,HttpStatus.OK);
+            TellerDisplayDTO tellerDisplayDTO = new TellerDisplayDTO();
+            tellerDisplayDTO.setSuccess(true);
+            tellerDisplayDTO.setMessage(tellerQueue.getQueueNumber());
+            tellerDisplayDTO.setTellerQueueId(tellerQueue.getTelerQueueId());
+            tellerDisplayDTO.setTransactionCustomer(tellerQueue.getTransactionCustomer());
+            tellerDisplayDTO.setQueueNumber(tellerQueue.getQueueNumber());
+            tellerDisplayDTO.setComplete(tellerQueue.isComplete());
+            tellerDisplayDTO.setComment(tellerQueue.getComment());
+            tellerDisplayDTO.setHold(tellerQueue.isHold());
+            tellerDisplayDTO.setQueueReject(tellerQueue.isQueueReject());
+            tellerDisplayDTO.setQueuePending(tellerQueue.isQueuePending());
+            tellerDisplayDTO.setQueueStartDate(tellerQueue.getQueueStartDate());
+            tellerDisplayDTO.setQueueEndDate(tellerQueue.getQueueEndDate());
+            tellerDisplayDTO.setQueueNumIdentification(tellerQueue.getQueueNumIdentification());
+            return new ResponseEntity<>(tellerDisplayDTO,HttpStatus.OK);
         } catch (ConstraintViolationException e)
         {
             return new ResponseEntity<>(returnTellerQueueNumber(currentQueueNumber+1,customerOptional),HttpStatus.OK);
@@ -293,8 +309,24 @@ public class TellerQueueServiceImpl extends DefaultResponnsesQueue implements Te
         tellerQueue.setQueueNumIdentification(currentQueueNumber);
         tellerQueue.setTransactionCustomer(customerOptional.get());
 
+
+
         tellerQueue = tellerQueueRepository.save(tellerQueue);
-        return new ResponseEntity<>(tellerQueue,HttpStatus.CREATED);
+        TellerDisplayDTO tellerDisplayDTO = new TellerDisplayDTO();
+        tellerDisplayDTO.setSuccess(true);
+        tellerDisplayDTO.setMessage(tellerQueue.getQueueNumber());
+        tellerDisplayDTO.setTellerQueueId(tellerQueue.getTelerQueueId());
+        tellerDisplayDTO.setTransactionCustomer(tellerQueue.getTransactionCustomer());
+        tellerDisplayDTO.setQueueNumber(tellerQueue.getQueueNumber());
+        tellerDisplayDTO.setComplete(tellerQueue.isComplete());
+        tellerDisplayDTO.setComment(tellerQueue.getComment());
+        tellerDisplayDTO.setHold(tellerQueue.isHold());
+        tellerDisplayDTO.setQueueReject(tellerQueue.isQueueReject());
+        tellerDisplayDTO.setQueuePending(tellerQueue.isQueuePending());
+        tellerDisplayDTO.setQueueStartDate(tellerQueue.getQueueStartDate());
+        tellerDisplayDTO.setQueueEndDate(tellerQueue.getQueueEndDate());
+        tellerDisplayDTO.setQueueNumIdentification(tellerQueue.getQueueNumIdentification());
+        return new ResponseEntity<>(tellerDisplayDTO,HttpStatus.CREATED);
     }
 
     private ResponseEntity<?> returnprorityTellerQueueNumber(double currentQueueNumber,Optional<TransactionCustomer> customerOptional){
