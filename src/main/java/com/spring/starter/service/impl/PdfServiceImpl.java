@@ -52,8 +52,13 @@ public class PdfServiceImpl implements PdfService {
                 dto.setDigFormType(request.getTransactionRequest().getDigiFormType());
                 dto.setIdentification(request.getTransactionCustomer().getIdentification());
                 dto.setRequestCompleteDate(request.getRequestCompleteDate());
-                dto.setEpfNumber(request.getAuthorizerDataTransaction().getStaffUser().getEpfNumber());
-                dto.setStaffName(request.getAuthorizerDataTransaction().getStaffUser().getName());
+                if (request.getStaffUser().isEmpty()){
+                    continue;
+                }else{
+                    int size=request.getStaffUser().size();
+                    dto.setEpfNumber(request.getStaffUser().get(size-1).getEpfNumber());
+                    dto.setStaffName(request.getStaffUser().get(size-1).getName());
+                }
                 dto.setQueueNumber(csrQueueRepository.getCSRQueueNumberByCustomerId(request.getCustomerTransactionRequestId()));
 
                 dtoList.add(dto);
