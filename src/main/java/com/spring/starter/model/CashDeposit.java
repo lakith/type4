@@ -27,22 +27,19 @@ public class CashDeposit {
     @Pattern(regexp = "^[0-9]*$")
     private String accountNumber;
 
-    @NotNull
-    @NotNull
-    @Size(min = 2)
+
+
     @Pattern(regexp = "^([A-Za-z0-9_\\s])*$")
     private String nameOfDepositor;
 
-    @NotNull
-    @Size(min = 2)
+
     @Pattern(regexp = "^([A-Za-z.,\\s])*$")
     private String address;
 
-    @NotNull
+
     private String identification;
 
-    @NotNull
-    @Size(min = 5)
+
     @Pattern(regexp = "^([A-Za-z.,\\s])*$")
     private String purposeOfDeposit;
 

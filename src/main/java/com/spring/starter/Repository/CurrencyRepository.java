@@ -12,4 +12,7 @@ public interface CurrencyRepository extends JpaRepository<Currency,Integer> {
     @Query("SELECT c FROM Currency c WHERE c.currency =:currency")
     public Optional<Currency> getCurrency(@Param("currency") String currency);
 
+    @Query("SELECT c FROM Currency c WHERE c.currency =?1")
+    public Optional<Currency> getCurrency2(String currency);
+
 }

@@ -428,22 +428,22 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
             return new ResponseEntity<>(responsemodel, HttpStatus.CREATED);
         }
 
-        if(customerServiceRequest.getUrl() == null || customerServiceRequest.getUrl().isEmpty()){
+/*        if(customerServiceRequest.getUrl() == null || customerServiceRequest.getUrl().isEmpty()){
             responsemodel.setMessage("Please complete the signature before completing the request");
             responsemodel.setStatus(true);
             return new ResponseEntity<>(responsemodel, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
-        }
+        }*/
         if(customerServiceRequest.isAuthorize()){
             responsemodel.setMessage("Please Authorize the request before complete");
             responsemodel.setStatus(true);
             return new ResponseEntity<>(responsemodel, HttpStatus.UNAUTHORIZED);
         }
 
-        if(checkFormexists(customerServiceRequest.getServiceRequest().getDigiFormId(),requestId)){
+/*        if(checkFormexists(customerServiceRequest.getServiceRequest().getDigiFormId(),requestId)){
             responsemodel.setMessage("Please complete the form before verifying");
             responsemodel.setStatus(true);
             return new ResponseEntity<>(responsemodel, HttpStatus.CREATED);
-        }
+        }*/
 
         if(customerServiceRequest.isStatus()){
             responsemodel.setMessage("Request is already varified");

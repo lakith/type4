@@ -60,6 +60,7 @@ public class CSRQueueServiceImpl extends DefaultResponnsesQueue implements CSRQu
         csrQueue.setQueuePending(true);
         csrQueue.setQueueNumIdentification(currentQueueNumber);
         csrQueue.setCustomer(customerOptional.get());
+        csrQueue.setChanelKey("D_JCpUlso16sg2RZdXNAv9_IJqyEWu0z");
 
         try {
             csrQueue = csrQueueRepository.save(csrQueue);
@@ -78,6 +79,7 @@ public class CSRQueueServiceImpl extends DefaultResponnsesQueue implements CSRQu
             csrDisplayDTO.setQueueStartDate(csrQueue.getQueueStartDate());
             csrDisplayDTO.setQueueEndDate(csrQueue.getQueueEndDate());
             csrDisplayDTO.setQueueNumIdentification(csrQueue.getQueueNumIdentification());
+            csrDisplayDTO.setKey("D_JCpUlso16sg2RZdXNAv9_IJqyEWu0z");
             return new ResponseEntity<>(csrDisplayDTO,HttpStatus.OK);
         } catch (ConstraintViolationException e)
         {
@@ -234,9 +236,26 @@ public class CSRQueueServiceImpl extends DefaultResponnsesQueue implements CSRQu
         csrQueue.setQueuePending(true);
         csrQueue.setQueueNumIdentification(number);
         csrQueue.setCustomer(customerOptional.get());
+        csrQueue.setChanelKey("D_JCpUlso16sg2RZdXNAv9_IJqyEWu0z");
 
         try {
             csrQueue = csrQueueRepository.save(csrQueue);
+            CSRDisplayDTO csrDisplayDTO = new CSRDisplayDTO();
+            csrDisplayDTO.setSuccess(true);
+            csrDisplayDTO.setMessage(csrQueue.getQueueNumber());
+            csrDisplayDTO.setCsrQueue(csrQueue);
+            csrDisplayDTO.setCSRQueueId(csrQueue.getCSRQueueId());
+            csrDisplayDTO.setCustomer(csrQueue.getCustomer());
+            csrDisplayDTO.setQueueNumber(csrQueue.getQueueNumber());
+            csrDisplayDTO.setComplete(csrQueue.isComplete());
+            csrDisplayDTO.setComment(csrQueue.getComment());
+            csrDisplayDTO.setHold(csrQueue.isHold());
+            csrDisplayDTO.setQueueReject(csrQueue.isQueueReject());
+            csrDisplayDTO.setQueuePending(csrQueue.isQueuePending());
+            csrDisplayDTO.setQueueStartDate(csrQueue.getQueueStartDate());
+            csrDisplayDTO.setQueueEndDate(csrQueue.getQueueEndDate());
+            csrDisplayDTO.setQueueNumIdentification(csrQueue.getQueueNumIdentification());
+            csrDisplayDTO.setKey("D_JCpUlso16sg2RZdXNAv9_IJqyEWu0z");
             return new ResponseEntity<>(csrQueue, HttpStatus.OK);
         } catch (ConstraintViolationException e)
         {

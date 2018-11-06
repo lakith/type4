@@ -22,7 +22,7 @@ public class FundTransferWithinNDBDTO implements Serializable {
     @Size(min = 2)
     private String fromAccountType;
     @NotNull
-    private int currencyId;
+    private String currency;
     @NotNull
     private double amount;
 
@@ -39,12 +39,14 @@ public class FundTransferWithinNDBDTO implements Serializable {
     public FundTransferWithinNDBDTO() {
     }
 
-    public FundTransferWithinNDBDTO(@NotNull Date date, @NotNull @Min(value = 2, message = "Insert Valid Account Number To Continue") long fromAccount, @NotNull @Size(min = 2) String fromAccountType, @NotNull int currencyId, @NotNull double amount, @NotNull @Min(value = 2, message = "Insert Valid Account Number To Continue") long toAccount, @NotNull int branchId) {
+    public FundTransferWithinNDBDTO(@NotNull Date date, @NotNull @Min(value = 2, message = "Insert Valid Account Number To Continue") long fromAccount, @NotNull @Size(min = 2) String fromAccountName, @NotNull @Size(min = 2) String fromAccountType, @NotNull String currency, @NotNull double amount, @NotNull @Size(min = 2) String toAccountName, @NotNull @Min(value = 2, message = "Insert Valid Account Number To Continue") long toAccount, @NotNull int branchId) {
         this.date = date;
         this.fromAccount = fromAccount;
+        this.fromAccountName = fromAccountName;
         this.fromAccountType = fromAccountType;
-        this.currencyId = currencyId;
+        this.currency = currency;
         this.amount = amount;
+        this.toAccountName = toAccountName;
         this.toAccount = toAccount;
         this.branchId = branchId;
     }
@@ -73,12 +75,12 @@ public class FundTransferWithinNDBDTO implements Serializable {
         this.fromAccountType = fromAccountType;
     }
 
-    public int getCurrencyId() {
-        return currencyId;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setCurrencyId(int currencyId) {
-        this.currencyId = currencyId;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public double getAmount() {

@@ -1,5 +1,7 @@
 package com.spring.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -34,6 +36,7 @@ public class FundTransferSLIPSBreakDown {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fundTransferSLIPSId")
+    @JsonIgnore
     private FundTransferSLIPS fundTransferSLIPS;
 
     public FundTransferSLIPSBreakDown() {

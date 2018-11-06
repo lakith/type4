@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +37,13 @@ public class PdfServiceImpl implements PdfService {
     public void dailyReport() {
 
        Date date=java.util.Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String strdate = sdf.format(date);
+        try {
+            Date dates= sdf.parse(strdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         List<DailyPdfReportDTO> dtoList=new ArrayList<>();
 
@@ -68,7 +77,8 @@ public class PdfServiceImpl implements PdfService {
             ByteArrayInputStream bis = DailyReport.report(dtoList);
 
             try {
-                IOUtils.copy(bis, new FileOutputStream("Daily Report OF "+date+""));
+
+                System.out.println(IOUtils.copy(bis, new FileOutputStream("File Storage/Daily Report OF.pdf")));
 
             } catch (IOException e) {
                 e.printStackTrace();

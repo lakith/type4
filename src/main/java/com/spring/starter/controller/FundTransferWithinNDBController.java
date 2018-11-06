@@ -77,7 +77,7 @@ public class FundTransferWithinNDBController {
     }
 
     @PostMapping("/fund_transfer_within-ndb-denominations")
-    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,FundTransferWithinNDBBreakDown breakDown){
+    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,@RequestBody @Valid FundTransferWithinNDBBreakDown breakDown){
         return  fundTransferWithinNDBService.fundTransferWithinNDBBreakdown(requestId,breakDown);
     }
 }

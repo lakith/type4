@@ -77,7 +77,7 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
             if(optional.isPresent()){
                 fundTransferWithinNDB.setFundTransferWithinNdbId(optional.get().getFundTransferWithinNdbId());
             }
-            Optional<Currency> currencyOptional = currencyRepository.findById(fundTransferWithinNDBDTO.getCurrencyId());
+            Optional<Currency> currencyOptional = currencyRepository.getCurrency2(fundTransferWithinNDBDTO.getCurrency());
             if(!currencyOptional.isPresent()){
                 return new ResponseEntity<>(new ResponseModel("invaliedCurrencyDetails",false),HttpStatus.OK);
             }
@@ -234,7 +234,7 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
             return new ResponseEntity<>(responseModel,HttpStatus.BAD_REQUEST);
         }
 
-        Optional<Currency> currencyOptional = currencyRepository.findById(fundTransferWithinNDBDTO.getCurrencyId());
+        Optional<Currency> currencyOptional = currencyRepository.getCurrency2(fundTransferWithinNDBDTO.getCurrency());
         if(!currencyOptional.isPresent()){
             return new ResponseEntity<>(new ResponseModel("invaliedCurrencyDetails",false),HttpStatus.OK);
         }
@@ -432,7 +432,7 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
 
             try {
                 object = fundTransferWithinNDBRepository.save(object);
-                return new ResponseEntity<>(object,HttpStatus.OK);
+                return new ResponseEntity<>(breakDown,HttpStatus.OK);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());
             }

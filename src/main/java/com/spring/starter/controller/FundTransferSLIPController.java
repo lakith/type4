@@ -75,7 +75,7 @@ public class FundTransferSLIPController {
     }
 
     @PostMapping("/fund-transfer-slip-denominations")
-    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,FundTransferSLIPSBreakDown breakDown){
+    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,@RequestBody @Valid FundTransferSLIPSBreakDown breakDown){
         return  fundTransferSLIPService.fundtransferSLIPBreakdown(requestId,breakDown);
     }
 
