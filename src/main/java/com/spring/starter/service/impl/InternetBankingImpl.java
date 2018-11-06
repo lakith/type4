@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.spring.starter.Repository.*;
 import com.spring.starter.configuration.ServiceRequestIdConfig;
+import com.spring.starter.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,23 +17,6 @@ import org.springframework.stereotype.Service;
 import com.spring.starter.DTO.LinkAccountDTO;
 import com.spring.starter.DTO.ReissueLoginPasswordDTO;
 import com.spring.starter.Exception.CustomException;
-import com.spring.starter.Repository.CustomerServiceRequestRepository;
-import com.spring.starter.Repository.ExcludeInternetAccountRepository;
-import com.spring.starter.Repository.InternetBankingExcludeAccountNumbersRepository;
-import com.spring.starter.Repository.InternetBankingLinkAccountNumbersRepository;
-import com.spring.starter.Repository.InternetBankingRepository;
-import com.spring.starter.Repository.LinkAccountModelRepository;
-import com.spring.starter.Repository.NDBBranchRepository;
-import com.spring.starter.Repository.ReissueLoginPasswordModelRepository;
-import com.spring.starter.model.CustomerServiceRequest;
-import com.spring.starter.model.ExcludeInternetAccount;
-import com.spring.starter.model.InternetBanking;
-import com.spring.starter.model.InternetBankingExcludeAccountNumbers;
-import com.spring.starter.model.InternetBankingLinkAccountNumbers;
-import com.spring.starter.model.LinkAccountModel;
-import com.spring.starter.model.NDBBranch;
-import com.spring.starter.model.ReissueLoginPasswordModel;
-import com.spring.starter.model.ResponseModel;
 import com.spring.starter.service.InternetBankingService;
 
 @Service
@@ -54,7 +39,7 @@ public class InternetBankingImpl implements InternetBankingService{
 	private InternetBankingLinkAccountNumbersRepository linkAccountNumbersRepository; 
 	
 	@Autowired
-	private NDBBranchRepository branchRepository; 
+	private BranchRepository branchRepository;
 	
 	@Autowired
 	private ReissueLoginPasswordModelRepository loginPasswordModelRepository;
@@ -276,14 +261,14 @@ public class InternetBankingImpl implements InternetBankingService{
 			responsemodel.setStatus(false);
 			return new ResponseEntity<>(responsemodel, HttpStatus.BAD_REQUEST);
 		}
-		NDBBranch ndbBranch = new NDBBranch();
+		Branch ndbBranch = new Branch();
 		if(loginPasswordModel.isAtBranch()){
 			if(loginPasswordModel.getBranchId() == 0) {
 				responsemodel.setMessage("Complete Bank Details");
 				responsemodel.setStatus(false);
 				return new ResponseEntity<>(responsemodel, HttpStatus.BAD_REQUEST);
 			}
-			Optional<NDBBranch> branchOpt = branchRepository.findById(loginPasswordModel.getBranchId());
+			Optional<Branch> branchOpt = branchRepository.findById(loginPasswordModel.getBranchId());
 			if(!branchOpt.isPresent()) {
 				responsemodel.setMessage("Invalied Bank Details");
 				responsemodel.setStatus(false);

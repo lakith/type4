@@ -119,6 +119,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/serviceRequest/SMSAlertsforCreditCard").permitAll()
                 .antMatchers("/serviceRequest/get-all-customer-requests-filter-by-reject/**").permitAll()
                 .antMatchers("/Transaction-Request/add-service").permitAll()
+                .antMatchers("/Transaction-Request/view-transaction-request/**").permitAll()
                 .antMatchers("/Transaction-Request/getServiceRequestForm").permitAll()
                 .antMatchers("/Transaction-Request/ger-all-service").permitAll()
                 .antMatchers("/Transaction-Request/tif-image").permitAll()
