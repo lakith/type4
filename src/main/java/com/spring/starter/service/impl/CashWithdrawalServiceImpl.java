@@ -116,6 +116,12 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
         if(!cashWithdrawal.isPresent()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
+
+            Optional<CashWithDrawalBreakDown> breakDownOptional=cashWithDrawalBreakDownRepositroy.findBreakDown(cashwithdrawalID);
+            if (breakDownOptional.isPresent()){
+                cashWithDrawalBreakDown.setCashWithDrawalBreakDownId(breakDownOptional.get().getCashWithDrawalBreakDownId());
+            }
+
             cashWithDrawalBreakDown.setCashWithdrawal(cashWithdrawal.get());
             try {
                 cashWithDrawalBreakDown = cashWithDrawalBreakDownRepositroy.save(cashWithDrawalBreakDown);

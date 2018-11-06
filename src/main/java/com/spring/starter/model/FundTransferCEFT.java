@@ -1,6 +1,5 @@
 package com.spring.starter.model;
 
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -54,21 +53,30 @@ public class FundTransferCEFT {
     @JoinColumn(name = "fundTransferCEFTFiles")
     private List<FundTransferCEFTFiles> fundTransferCEFTFiles;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fundTransferCEFTBreakDownId")
+    private FundTransferCEFTBreakDown fundTransferCEFTBreakDown;
+
     private String url;
 
     private boolean status;
 
     private Date requestCompleteDate;
 
-    public FundTransferCEFT(@NotNull String creditAccountNo, @NotNull @Size(min = 3) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String accountName, @NotNull double ammount, Bank bank, Branch branch, @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String reason, CustomerTransactionRequest customerTransactionRequest, String url) {
+    public FundTransferCEFT(@NotNull String creditAccountNo, @NotNull @Size(min = 3) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String accountName, @NotNull @Size(min = 3) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String accountNumber, @NotNull double ammount, Bank bank, Branch branch, @NotNull @Size(min = 2) @Pattern(regexp = "^([A-Za-z0-9_\\s])*$") String reason, CustomerTransactionRequest customerTransactionRequest, List<FundTransferCEFTFiles> fundTransferCEFTFiles, FundTransferCEFTBreakDown fundTransferCEFTBreakDown, String url, boolean status, Date requestCompleteDate) {
         this.creditAccountNo = creditAccountNo;
         this.accountName = accountName;
+        this.accountNumber = accountNumber;
         this.ammount = ammount;
         this.bank = bank;
         this.branch = branch;
         this.reason = reason;
         this.customerTransactionRequest = customerTransactionRequest;
+        this.fundTransferCEFTFiles = fundTransferCEFTFiles;
+        this.fundTransferCEFTBreakDown = fundTransferCEFTBreakDown;
         this.url = url;
+        this.status = status;
+        this.requestCompleteDate = requestCompleteDate;
     }
 
     public String getUrl() {
@@ -178,5 +186,13 @@ public class FundTransferCEFT {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public FundTransferCEFTBreakDown getFundTransferCEFTBreakDown() {
+        return fundTransferCEFTBreakDown;
+    }
+
+    public void setFundTransferCEFTBreakDown(FundTransferCEFTBreakDown fundTransferCEFTBreakDown) {
+        this.fundTransferCEFTBreakDown = fundTransferCEFTBreakDown;
     }
 }

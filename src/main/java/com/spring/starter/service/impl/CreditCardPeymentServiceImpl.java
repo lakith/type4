@@ -1,5 +1,6 @@
 package com.spring.starter.service.impl;
 
+import com.spring.starter.Exception.CustomException;
 import com.spring.starter.Repository.*;
 import com.spring.starter.configuration.TransactionIdConfig;
 import com.spring.starter.model.*;
@@ -27,6 +28,8 @@ public class CreditCardPeymentServiceImpl implements CreditCardPeymentService {
 
     @Autowired
     private CreditCardPeymentRepository creditCardPeymentRepository;
+    @Autowired
+    private CreditCardPaymentBreakDownRepository creditCardPaymentBreakDownRepository;
 
 
     public ResponseEntity<?> addCreditCardPeyment(CrediitCardPeyment crediitCardPeyment, int customerTransactionRequestId) throws Exception {
@@ -99,6 +102,38 @@ public class CreditCardPeymentServiceImpl implements CreditCardPeymentService {
             throw new Exception(e.getMessage());
         }
 
+    }
+
+    @Override
+    public ResponseEntity<?> creditCardPaymentBreakdown(int crediitCardPeymentId, CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
+        Optional<CrediitCardPeyment> optional = creditCardPeymentRepository.findById(crediitCardPeymentId);
+        if(!optional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+
+            Optional<CreditCardPaymentBreakDown> breakDownOptional=creditCardPaymentBreakDownRepository.findBreakDown(crediitCardPeymentId);
+            if (breakDownOptional.isPresent()){
+                creditCardPaymentBreakDown.setCreditCardPaymentBreakDownId(breakDownOptional.get().getCreditCardPaymentBreakDownId());
+            }
+
+            creditCardPaymentBreakDown.setCrediitCardPeyment(optional.get());
+            try {
+                creditCardPaymentBreakDown = creditCardPaymentBreakDownRepository.save(creditCardPaymentBreakDown);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+            CrediitCardPeyment object = optional.get();
+            object.setCreditCardPaymentBreakDown(creditCardPaymentBreakDown);
+
+            try {
+                object = creditCardPeymentRepository.save(object);
+                return new ResponseEntity<>(object,HttpStatus.OK);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+        }
     }
 
     public ResponseEntity<?> getCreditCardPaymentRequest(int creditCardPeymentId){

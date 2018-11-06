@@ -4,6 +4,8 @@ import com.spring.starter.DTO.DetailsUpdateDTO;
 import com.spring.starter.DTO.FileDTO;
 import com.spring.starter.DTO.FundTransferWithinNDBDTO;
 import com.spring.starter.DTO.TransactionSignatureDTO;
+import com.spring.starter.model.FundTransferWithinNDB;
+import com.spring.starter.model.FundTransferWithinNDBBreakDown;
 import org.springframework.http.ResponseEntity;
 
 public interface FundTransferWithinNDBService {
@@ -18,5 +20,7 @@ public interface FundTransferWithinNDBService {
     public ResponseEntity<?> saveTrasnsactionSignature(TransactionSignatureDTO signatureDTO) throws Exception;
 
     public ResponseEntity<?> getTransferUpdateRecords(int requestId);
+
+    public ResponseEntity<?> fundTransferWithinNDBBreakdown(int fundTransferWithinNdbId,FundTransferWithinNDBBreakDown fundTransferWithinNDBBreakDown);
 
 }

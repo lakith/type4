@@ -1,6 +1,7 @@
 package com.spring.starter.service.impl;
 
 import com.spring.starter.DTO.*;
+import com.spring.starter.Exception.CustomException;
 import com.spring.starter.Repository.*;
 import com.spring.starter.configuration.TransactionIdConfig;
 import com.spring.starter.model.*;
@@ -38,6 +39,8 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
     private FundTransferWithinNDBErrorRecordsRepository fundTransferWithinNDBErrorRecordsRepository;
     @Autowired
     private CurrencyRepository currencyRepository;
+    @Autowired
+    private FundTransferWithinNDBBreakDownRepository fundTransferWithinNDBBreakDownRepository;
 
     private ResponseModel responseModel = new ResponseModel();
 
@@ -403,6 +406,37 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
                 ndbUpdateDTOS.add(updateRecordsDTO);
             }
             return new ResponseEntity<>(ndbUpdateDTOS, HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> fundTransferWithinNDBBreakdown(int fundTransferWithinNdbId, FundTransferWithinNDBBreakDown breakDown) {
+
+        Optional<FundTransferWithinNDB> optional = fundTransferWithinNDBRepository.findById(fundTransferWithinNdbId);
+        if(!optional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            Optional<FundTransferWithinNDBBreakDown> breakDownOptional=fundTransferWithinNDBBreakDownRepository.findBreakDown(fundTransferWithinNdbId);
+            if (breakDownOptional.isPresent()){
+                breakDown.setFundTransferWithinNDBBreakDownId(breakDownOptional.get().getFundTransferWithinNDBBreakDownId());
+            }
+            breakDown.setFundTransferWithinNDB(optional.get());
+            try {
+                breakDown = fundTransferWithinNDBBreakDownRepository.save(breakDown);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+            FundTransferWithinNDB object = optional.get();
+            object.setFundTransferWithinNDBBreakDown(breakDown);
+
+            try {
+                object = fundTransferWithinNDBRepository.save(object);
+                return new ResponseEntity<>(object,HttpStatus.OK);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
         }
     }
 

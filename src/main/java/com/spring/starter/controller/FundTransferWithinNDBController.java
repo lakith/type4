@@ -5,6 +5,7 @@ import com.spring.starter.DTO.DetailsUpdateDTO;
 import com.spring.starter.DTO.FileDTO;
 import com.spring.starter.DTO.FundTransferWithinNDBDTO;
 import com.spring.starter.DTO.TransactionSignatureDTO;
+import com.spring.starter.model.FundTransferWithinNDBBreakDown;
 import com.spring.starter.service.FundTransferWithinNDBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +74,10 @@ public class FundTransferWithinNDBController {
     @GetMapping("/fund-transfer-within-ndb-update-records")
     public ResponseEntity<?> getBillPaymentUpdateRecords(@RequestParam(name="requestId") int requestId) {
         return fundTransferWithinNDBService.getTransferUpdateRecords(requestId);
+    }
+
+    @PostMapping("/fund_transfer_within-ndb-denominations")
+    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,FundTransferWithinNDBBreakDown breakDown){
+        return  fundTransferWithinNDBService.fundTransferWithinNDBBreakdown(requestId,breakDown);
     }
 }

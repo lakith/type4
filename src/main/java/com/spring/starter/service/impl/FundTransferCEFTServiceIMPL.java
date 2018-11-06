@@ -1,6 +1,7 @@
 package com.spring.starter.service.impl;
 
 import com.spring.starter.DTO.*;
+import com.spring.starter.Exception.CustomException;
 import com.spring.starter.Repository.*;
 import com.spring.starter.configuration.TransactionIdConfig;
 import com.spring.starter.model.*;
@@ -46,6 +47,9 @@ public class FundTransferCEFTServiceIMPL implements FundTransferCEFTService {
 
     @Autowired
     FundTransferCEFTErrorRecordsRepository fundTransferCEFTErrorRecordsRepository;
+
+    @Autowired
+    private FundTransferCEFTBreakDownRepository fundTransferCEFTBreakDownRepository;
 
 
     @Override
@@ -397,6 +401,37 @@ public class FundTransferCEFTServiceIMPL implements FundTransferCEFTService {
             }
 
             return new ResponseEntity<>(updatedRecords, HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> fundtransferCEFTBreakdown(int fundTransferCEFTId, FundTransferCEFTBreakDown breakDown) {
+
+        Optional<FundTransferCEFT> optional = fundTransferCEFTRepository.findById(fundTransferCEFTId);
+        if(!optional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            Optional<FundTransferCEFTBreakDown> breakDownOptional=fundTransferCEFTBreakDownRepository.findBreakDown(fundTransferCEFTId);
+            if (breakDownOptional.isPresent()){
+                breakDown.setFundTransferCEFTBreakDownId(breakDownOptional.get().getFundTransferCEFTBreakDownId());
+            }
+            breakDown.setFundTransferCEFT(optional.get());
+            try {
+                breakDown = fundTransferCEFTBreakDownRepository.save(breakDown);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+            FundTransferCEFT object = optional.get();
+            object.setFundTransferCEFTBreakDown(breakDown);
+
+            try {
+                object = fundTransferCEFTRepository.save(object);
+                return new ResponseEntity<>(object,HttpStatus.OK);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
         }
     }
 

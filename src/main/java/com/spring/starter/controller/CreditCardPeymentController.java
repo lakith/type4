@@ -3,6 +3,7 @@ package com.spring.starter.controller;
 import com.spring.starter.model.Bank;
 import com.spring.starter.model.Branch;
 import com.spring.starter.model.CrediitCardPeyment;
+import com.spring.starter.model.CreditCardPaymentBreakDown;
 import com.spring.starter.service.CreditCardPeymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,11 @@ public class CreditCardPeymentController {
     @GetMapping("/{creditCardPaymentId}")
     public ResponseEntity<?> getCreditCardPayment(@PathVariable int creditCardPaymentId){
         return creditCardPeymentService.getCreditCardPaymentRequest(creditCardPaymentId);
+    }
+
+    @PostMapping("/credit_card-payment-denominations")
+    private ResponseEntity<?> paymentDenominations(@RequestParam(name="requestId") int requestId,CreditCardPaymentBreakDown breakDown){
+        return  creditCardPeymentService.creditCardPaymentBreakdown(requestId,breakDown);
     }
 
     @GetMapping

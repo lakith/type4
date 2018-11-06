@@ -4,6 +4,7 @@ import com.spring.starter.DTO.FileDTO;
 import com.spring.starter.DTO.DetailsUpdateDTO;
 import com.spring.starter.DTO.TransactionSignatureDTO;
 import com.spring.starter.model.CashDeposit;
+import com.spring.starter.model.CashDepositBreakDown;
 import org.springframework.http.ResponseEntity;
 
 public interface CashDepositService {
@@ -20,6 +21,8 @@ public interface CashDepositService {
     public ResponseEntity<?> getCashDepositRequest(int cashDepositId);
 
     public ResponseEntity<?> getDepositUpdateRecords(int requestId);
+
+    public ResponseEntity<?> cashDipositBreakdown(int cashDepositId,CashDepositBreakDown cashDepositBreakDown);
 
 
 }

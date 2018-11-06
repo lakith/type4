@@ -37,6 +37,8 @@ public class CashDepositServiceImpl implements CashDepositService {
     private CashDepositErrorRecordsRepository cashDepositErrorRecordsRepository;
     @Autowired
     private CurrencyRepository currencyRepository;
+    @Autowired
+    private CashDepositBreakDownRepository cashDepositBreakDownRepository;
 
     private ResponseModel responseModel = new ResponseModel();
 
@@ -572,6 +574,36 @@ public class CashDepositServiceImpl implements CashDepositService {
                 cashDepositUpdateRecords.add(updateRecordsDTO);
             }
             return new ResponseEntity<>(cashDepositUpdateRecords, HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> cashDipositBreakdown(int cashDepositId, CashDepositBreakDown breakDown) {
+        Optional<CashDeposit> optional = cashdepositRepositiry.findById(cashDepositId);
+        if(!optional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            Optional<CashDepositBreakDown> breakDownOptional=cashDepositBreakDownRepository.findBreakDown(cashDepositId);
+            if (breakDownOptional.isPresent()){
+                breakDown.setCashDepositBreakDownId(breakDownOptional.get().getCashDepositBreakDownId());
+            }
+            breakDown.setCashDeposit(optional.get());
+            try {
+                breakDown = cashDepositBreakDownRepository.save(breakDown);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+            CashDeposit object = optional.get();
+            object.setCashDepositBreakDown(breakDown);
+
+            try {
+                object = cashdepositRepositiry.save(object);
+                return new ResponseEntity<>(object,HttpStatus.OK);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
         }
     }
 }

@@ -5,6 +5,7 @@ import com.spring.starter.DTO.*;
 import com.spring.starter.model.Bank;
 import com.spring.starter.model.Branch;
 import com.spring.starter.model.FundTransferCEFT;
+import com.spring.starter.model.FundTransferCEFTBreakDown;
 import com.spring.starter.service.FundTransferCEFTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -75,6 +76,11 @@ public class FundTransferCEFTController {
     @GetMapping("/{OtherbankServiceCEFTId}")
     public ResponseEntity<?> getOtherbankServiceCEFT(@PathVariable int OtherbankServiceCEFTId){
         return fundTransferCEFTService.getFundTransferCEFTRequest(OtherbankServiceCEFTId);
+    }
+
+    @PostMapping("/fund-transfer-ceft-denominations")
+    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,FundTransferCEFTBreakDown breakDown){
+        return  fundTransferCEFTService.fundtransferCEFTBreakdown(requestId,breakDown);
     }
 
     @GetMapping("/testing")

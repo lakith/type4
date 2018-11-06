@@ -4,6 +4,7 @@ import com.spring.starter.DTO.FileDTO;
 import com.spring.starter.DTO.FundTransferCEFTDTO;
 import com.spring.starter.DTO.TransactionSignatureDTO;
 import com.spring.starter.model.FundTransferCEFT;
+import com.spring.starter.model.FundTransferCEFTBreakDown;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,4 +22,6 @@ public interface FundTransferCEFTService {
                                                            int customerServiceRequestId, String comment) throws Exception;
 
     public ResponseEntity<?> getCEFTUpdateRecords(int requestId);
+
+    public ResponseEntity<?> fundtransferCEFTBreakdown(int fundTransferCEFTId,FundTransferCEFTBreakDown fundTransferCEFTBreakDown);
 }

@@ -5,6 +5,7 @@ import com.spring.starter.DTO.FileDTO;
 import com.spring.starter.DTO.DetailsUpdateDTO;
 import com.spring.starter.DTO.TransactionSignatureDTO;
 import com.spring.starter.model.CashDeposit;
+import com.spring.starter.model.CashDepositBreakDown;
 import com.spring.starter.model.Currency;
 import com.spring.starter.service.CashDepositService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,11 @@ public class CashDepositController {
     @GetMapping("/cash-deposit-update-records")
     public ResponseEntity<?> getBillPaymentUpdateRecords(@RequestParam(name="requestId") int requestId) {
         return cashDepositService.getDepositUpdateRecords(requestId);
+    }
+
+    @PostMapping("/cash-deposit-denominations")
+    private ResponseEntity<?> cashDepositDenominations(@RequestParam(name="requestId") int requestId,CashDepositBreakDown breakDown){
+        return  cashDepositService.cashDipositBreakdown(requestId,breakDown);
     }
 
     @GetMapping ("/test")
