@@ -74,20 +74,24 @@ public class CashDepositServiceImpl implements CashDepositService {
         }
 
         if(currency.get().getCurrency().equals("LKR")) {
-            if (cashDeposit.getValueOf10Notes() != 0 && cashDeposit.getValueOf20Notes() != 0 &&
-                    cashDeposit.getValueOf50Notes() != 0 && cashDeposit.getValueOf100Notes() != 0 &&
-                    cashDeposit.getValueOf500Notes() != 0 && cashDeposit.getValueof1000Notes() != 0 &&
-                    cashDeposit.getValueOf2000Notes() != 0 && cashDeposit.getValueOf2000Notes() != 0) {
-                double sum = (double) (cashDeposit.getValueOf5000Notes() + cashDeposit.getValueOf2000Notes()
-                        + cashDeposit.getValueof1000Notes() + cashDeposit.getValueOf100Notes() +
-                        cashDeposit.getValueOf500Notes() + cashDeposit.getValueOf50Notes() +
-                        cashDeposit.getValueOf20Notes() + cashDeposit.getValueOf10Notes() +
-                        cashDeposit.getValueOfcoins());
-                if (sum != cashDeposit.getTotal()) {
-                    responseModel.setMessage("Incorrect Cash Total");
-                    responseModel.setStatus(false);
-                    return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
-                }
+            if (cashDeposit.getValueOf10Notes() == 0 && cashDeposit.getValueOf20Notes() == 0 &&
+                    cashDeposit.getValueOf50Notes() == 0 && cashDeposit.getValueOf100Notes() == 0 &&
+                    cashDeposit.getValueOf500Notes() == 0 && cashDeposit.getValueof1000Notes() == 0 &&
+                    cashDeposit.getValueOf2000Notes() == 0 && cashDeposit.getValueOf2000Notes() == 0) {
+                responseModel.setMessage("Please fill cash details");
+                responseModel.setStatus(false);
+                return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
+            }
+
+            double sum = (double) (cashDeposit.getValueOf5000Notes() + cashDeposit.getValueOf2000Notes()
+                    + cashDeposit.getValueof1000Notes() + cashDeposit.getValueOf100Notes() +
+                    cashDeposit.getValueOf500Notes() + cashDeposit.getValueOf50Notes() +
+                    cashDeposit.getValueOf20Notes() + cashDeposit.getValueOf10Notes() +
+                    cashDeposit.getValueOfcoins());
+            if (sum != cashDeposit.getTotal()) {
+                responseModel.setMessage("Incorrect Cash Total");
+                responseModel.setStatus(false);
+                return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
             }
         }
         try {
