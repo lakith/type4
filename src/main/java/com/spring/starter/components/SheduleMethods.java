@@ -23,7 +23,7 @@ public class SheduleMethods {
     @Autowired
     private EntityManager em;
 
-    public void migrateAndDeleteDataCSR(){
+/*    public void migrateAndDeleteDataCSR(){
         javax.persistence.Query q1 = em.createNativeQuery("INSERT INTO csr_queue_history_details SELECT * FROM csr_queue");
         q1.executeUpdate();
         csrQueueRepository.deleteAll();
@@ -37,6 +37,6 @@ public class SheduleMethods {
         tellerQueueRepository.deleteAll();
         javax.persistence.Query q2 = em.createNativeQuery("ALTER TABLE teller_queue AUTO_INCREMENT = 1", TellerQueue.class);
         q2.executeUpdate();
-    }
+    }*/
 
 }

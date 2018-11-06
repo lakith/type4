@@ -80,7 +80,7 @@ public class CashWithdrawalController {
     }
 
     @PostMapping("/cash-withdrawal-denominations")
-    private ResponseEntity<?> cashWithdrawalDenominations(@RequestParam(name="requestId") int requestId,CashWithDrawalBreakDown cashWithDrawalBreakDown){
+    private ResponseEntity<?> cashWithdrawalDenominations(@RequestParam(name="requestId") int requestId,@RequestBody @Valid CashWithDrawalBreakDown cashWithDrawalBreakDown){
         return  cashWithdrawalService.cashWithdrawalBreakdown(requestId,cashWithDrawalBreakDown);
     }
 

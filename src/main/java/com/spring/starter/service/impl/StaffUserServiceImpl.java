@@ -279,7 +279,7 @@ public class StaffUserServiceImpl implements StaffUserService {
 			loginDisplayDTO.setAuthToken(accessToken);
 			loginDisplayDTO.setBranch(staffUserOpt.get().getBranch());
 			loginDisplayDTO.setBrowserKey(staffUserOpt.get().getBrowserKey());
-			loginDisplayDTO.setBrowserKey(staffUserOpt.get().getClientKey());
+			loginDisplayDTO.setClientKey(staffUserOpt.get().getClientKey());
 			loginDisplayDTO.setStaffRole(staffUserOpt.get().getStaffRole());
 
 		return new ResponseEntity<>(loginDisplayDTO,HttpStatus.OK);

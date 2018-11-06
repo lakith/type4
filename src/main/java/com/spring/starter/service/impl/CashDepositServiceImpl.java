@@ -599,7 +599,7 @@ public class CashDepositServiceImpl implements CashDepositService {
 
             try {
                 object = cashdepositRepositiry.save(object);
-                return new ResponseEntity<>(object,HttpStatus.OK);
+                return new ResponseEntity<>(breakDown,HttpStatus.OK);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());
             }

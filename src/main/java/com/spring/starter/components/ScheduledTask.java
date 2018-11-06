@@ -3,6 +3,7 @@ package com.spring.starter.components;
 import com.spring.starter.Repository.LoginlogsRepository;
 import com.spring.starter.model.CSRQueue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 @Component
+@EnableScheduling
 public class ScheduledTask {
 
     @Autowired
@@ -20,9 +22,6 @@ public class ScheduledTask {
     SheduleMethods sheduleMethods;
 
     private EntityManager em;
-
-
-
 
 /*    @Transactional
     @Scheduled(fixedRate = ScheduleConfig.FIVE_HOUR_INTERVAL)
@@ -40,11 +39,11 @@ public class ScheduledTask {
 
 
     @Transactional
-    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 45 0 1/1 * ?*")
     public void removeDeactivatedAccounts() {
         try {
-            sheduleMethods.migrateAndDeleteDataCSR();
-            sheduleMethods.migrateAndDeleteDataTeller();
+/*            sheduleMethods.migrateAndDeleteDataCSR();
+            sheduleMethods.migrateAndDeleteDataTeller();*/
         } catch (Exception e) {
             e.printStackTrace();
         }

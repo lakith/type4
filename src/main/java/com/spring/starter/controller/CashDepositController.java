@@ -87,7 +87,7 @@ public class CashDepositController {
     }
 
     @PostMapping("/cash-deposit-denominations")
-    private ResponseEntity<?> cashDepositDenominations(@RequestParam(name="requestId") int requestId,CashDepositBreakDown breakDown){
+    private ResponseEntity<?> cashDepositDenominations(@RequestParam(name="requestId") int requestId,@RequestBody @Valid CashDepositBreakDown breakDown){
         return  cashDepositService.cashDipositBreakdown(requestId,breakDown);
     }
 

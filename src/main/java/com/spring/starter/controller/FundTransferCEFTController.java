@@ -79,7 +79,7 @@ public class FundTransferCEFTController {
     }
 
     @PostMapping("/fund-transfer-ceft-denominations")
-    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,FundTransferCEFTBreakDown breakDown){
+    private ResponseEntity<?> denominations(@RequestParam(name="requestId") int requestId,@RequestBody @Valid FundTransferCEFTBreakDown breakDown){
         return  fundTransferCEFTService.fundtransferCEFTBreakdown(requestId,breakDown);
     }
 

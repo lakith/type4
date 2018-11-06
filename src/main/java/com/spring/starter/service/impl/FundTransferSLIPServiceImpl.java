@@ -331,7 +331,7 @@ public class FundTransferSLIPServiceImpl implements FundTransferSLIPService {
 
             try {
                 object = fundTransferSLIPRepository.save(object);
-                return new ResponseEntity<>(object,HttpStatus.OK);
+                return new ResponseEntity<>(breakDown,HttpStatus.OK);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());
             }

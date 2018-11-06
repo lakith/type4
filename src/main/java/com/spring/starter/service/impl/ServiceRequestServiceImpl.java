@@ -439,11 +439,11 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
             return new ResponseEntity<>(responsemodel, HttpStatus.UNAUTHORIZED);
         }
 
-        if(checkFormexists(customerServiceRequest.getServiceRequest().getDigiFormId(),requestId)){
+/*        if(checkFormexists(customerServiceRequest.getServiceRequest().getDigiFormId(),requestId)){
             responsemodel.setMessage("Please complete the form before verifying");
             responsemodel.setStatus(true);
             return new ResponseEntity<>(responsemodel, HttpStatus.CREATED);
-        }
+        }*/
 
         if(customerServiceRequest.isStatus()){
             responsemodel.setMessage("Request is already varified");

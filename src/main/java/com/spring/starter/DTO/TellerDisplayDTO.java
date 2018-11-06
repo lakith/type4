@@ -42,6 +42,8 @@ public class TellerDisplayDTO {
 
     private double queueNumIdentification;
 
+    private String key;
+
 
     public TellerDisplayDTO() {
     }
@@ -166,5 +168,13 @@ public class TellerDisplayDTO {
 
     public void setQueueNumIdentification(double queueNumIdentification) {
         this.queueNumIdentification = queueNumIdentification;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

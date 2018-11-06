@@ -23,8 +23,8 @@ public class QueueController {
 	@GetMapping("/queue-reset")
 	public ResponseEntity<?> QueueReset(){
 		ResponseModel responseModel = new ResponseModel();
-		sheduleMethods.migrateAndDeleteDataCSR();
-		sheduleMethods.migrateAndDeleteDataTeller();
+/*		sheduleMethods.migrateAndDeleteDataCSR();
+		sheduleMethods.migrateAndDeleteDataTeller();*/
 		responseModel.setStatus(true);
 		responseModel.setMessage("Queue Reset Successfully");
 		return new ResponseEntity<>(responseModel,HttpStatus.OK);

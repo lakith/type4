@@ -65,6 +65,8 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
     @Autowired
     private CSRDataTransactionRepository csrtransactionRepository;
 
+
+
     @Override
     public ResponseEntity<?> addNewServiceRequest(TransactionRequest transactionRequest) {
 
@@ -675,6 +677,33 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
 
 
         } else if(transactionRequrstId == TransactionIdConfig.FUND_TRANSFER_TO_OTHER_BANKS_SLIP){
+            Optional<CrediitCardPeyment> crediitCardPeymentOptional = creditCardPeymentRepository.getFormFromCSR(transactionRequrstId);
+            if(!crediitCardPeymentOptional.isPresent()){
+                return returnResponse();
+            } else {
+                CrediitCardPeyment crediitCardPeyment = crediitCardPeymentOptional.get();
+                if(crediitCardPeyment.getSignatureUrl() == null || crediitCardPeyment.getSignatureUrl().isEmpty()) {
+                    return withoutProvidingSignature();
+                } else {
+                    Optional<StaffUser> staffUserOpt = staffUserRepository.findById(Integer.parseInt(principal.getName()));
+                    if(!staffUserOpt.isPresent()){
+                        return identifiedAsUnauthorizedLogin();
+                    } else {
+                        CustomerTransactionRequest customerTransactionRequest1 = getCustomerTransactionRequest
+                                (customerTransactionRequest,staffUserOpt);
+
+                        crediitCardPeyment.setStatus(true);
+                        crediitCardPeyment.setRequestCompleteDate(java.util.Calendar.getInstance().getTime());
+                        crediitCardPeyment.setCustomerTransactionRequest(customerTransactionRequest1);
+
+                        crediitCardPeyment = creditCardPeymentRepository.save(crediitCardPeyment);
+
+                        return new  ResponseEntity<>(crediitCardPeyment,HttpStatus.OK);
+                    }
+                }
+            }
+
+        } else if(transactionRequrstId == TransactionIdConfig.CREDIT_CARD_PEYMENT){
             Optional<FundTransferSLIPS> optionalTransferSLIPS = fundTransferSLIPRepository.getFormFromCSR(transactionRequrstId);
             if(!optionalTransferSLIPS.isPresent()){
                 return returnResponse();

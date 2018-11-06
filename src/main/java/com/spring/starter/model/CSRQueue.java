@@ -42,8 +42,10 @@ public class CSRQueue {
     @Column
     private Date queueEndDate;
 
+    @Column
     private double queueNumIdentification;
 
+    private String chanelKey;
 
     public CSRQueue() {
     }
@@ -147,5 +149,13 @@ public class CSRQueue {
 
     public void setQueueNumIdentification(double queueNumIdentification) {
         this.queueNumIdentification = queueNumIdentification;
+    }
+
+    public String getChanelKey() {
+        return chanelKey;
+    }
+
+    public void setChanelKey(String chanelKey) {
+        this.chanelKey = chanelKey;
     }
 }

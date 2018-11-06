@@ -1,5 +1,7 @@
 package com.spring.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -34,6 +36,7 @@ public class CashDepositBreakDown {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cashDepositId")
+    @JsonIgnore
     private CashDeposit cashDeposit;
 
     public CashDepositBreakDown() {

@@ -59,6 +59,7 @@ public class TellerQueueServiceImpl extends DefaultResponnsesQueue implements Te
         tellerQueue.setQueuePending(true);
         tellerQueue.setQueueNumIdentification(currentQueueNumber);
         tellerQueue.setTransactionCustomer(customerOptional.get());
+        //tellerQueue.setKey("D_JCpUlso16sg2RZdXNAv9_IJqyEWu0z");
 
         try {
             tellerQueue = tellerQueueRepository.save(tellerQueue);
@@ -76,6 +77,7 @@ public class TellerQueueServiceImpl extends DefaultResponnsesQueue implements Te
             tellerDisplayDTO.setQueueStartDate(tellerQueue.getQueueStartDate());
             tellerDisplayDTO.setQueueEndDate(tellerQueue.getQueueEndDate());
             tellerDisplayDTO.setQueueNumIdentification(tellerQueue.getQueueNumIdentification());
+            tellerDisplayDTO.setKey("D_JCpUlso16sg2RZdXNAv9_IJqyEWu0z");
             return new ResponseEntity<>(tellerDisplayDTO,HttpStatus.OK);
         } catch (ConstraintViolationException e)
         {
@@ -231,10 +233,26 @@ public class TellerQueueServiceImpl extends DefaultResponnsesQueue implements Te
         tellerQueue.setQueuePending(true);
         tellerQueue.setQueueNumIdentification(number);
         tellerQueue.setTransactionCustomer(optionalTransactionCustomer.get());
+        //tellerQueue.setKey("D_JCpUlso16sg2RZdXNAv9_IJqyEWu0z");
 
         try {
             tellerQueue = tellerQueueRepository.save(tellerQueue);
-            return new ResponseEntity<>(tellerQueue, HttpStatus.OK);
+            TellerDisplayDTO tellerDisplayDTO = new TellerDisplayDTO();
+            tellerDisplayDTO.setSuccess(true);
+            tellerDisplayDTO.setMessage(tellerQueue.getQueueNumber());
+            tellerDisplayDTO.setTellerQueueId(tellerQueue.getTelerQueueId());
+            tellerDisplayDTO.setTransactionCustomer(tellerQueue.getTransactionCustomer());
+            tellerDisplayDTO.setQueueNumber(tellerQueue.getQueueNumber());
+            tellerDisplayDTO.setComplete(tellerQueue.isComplete());
+            tellerDisplayDTO.setComment(tellerQueue.getComment());
+            tellerDisplayDTO.setHold(tellerQueue.isHold());
+            tellerDisplayDTO.setQueueReject(tellerQueue.isQueueReject());
+            tellerDisplayDTO.setQueuePending(tellerQueue.isQueuePending());
+            tellerDisplayDTO.setQueueStartDate(tellerQueue.getQueueStartDate());
+            tellerDisplayDTO.setQueueEndDate(tellerQueue.getQueueEndDate());
+            tellerDisplayDTO.setQueueNumIdentification(tellerQueue.getQueueNumIdentification());
+            tellerDisplayDTO.setKey("D_JCpUlso16sg2RZdXNAv9_IJqyEWu0z");
+            return new ResponseEntity<>(tellerDisplayDTO, HttpStatus.OK);
         } catch (ConstraintViolationException e)
         {
             return new ResponseEntity<>(returnprorityTellerQueueNumber(number+0.01,optionalTransactionCustomer),HttpStatus.OK);

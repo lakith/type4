@@ -41,7 +41,11 @@ public class TellerQueue {
     @Column
     private Date queueEndDate;
 
+    @Column
     private double queueNumIdentification;
+
+    private String channelKey;
+
 
     public TellerQueue() {
     }
@@ -147,5 +151,13 @@ public class TellerQueue {
 
     public void setQueueNumIdentification(double queueNumIdentification) {
         this.queueNumIdentification = queueNumIdentification;
+    }
+
+    public String getChannelKey() {
+        return channelKey;
+    }
+
+    public void setChannelKey(String channelKey) {
+        this.channelKey = channelKey;
     }
 }

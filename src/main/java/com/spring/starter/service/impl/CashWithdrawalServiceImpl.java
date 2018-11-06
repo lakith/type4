@@ -134,7 +134,7 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
 
             try {
                 ca = cashWithdrawalRepository.save(ca);
-                return new ResponseEntity<>(ca,HttpStatus.OK);
+                return new ResponseEntity<>(cashWithDrawalBreakDown,HttpStatus.OK);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());
             }

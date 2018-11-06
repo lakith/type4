@@ -392,8 +392,8 @@ public class BillPaymentServiceImpl implements BillPaymentService {
 
     @Override
     public ResponseEntity<?> test(){
-        sheduleMethods.migrateAndDeleteDataCSR();
-        sheduleMethods.migrateAndDeleteDataTeller();
+/*        sheduleMethods.migrateAndDeleteDataCSR();
+        sheduleMethods.migrateAndDeleteDataTeller();*/
         return new ResponseEntity<>("Success",HttpStatus.OK);
     }
 
