@@ -1,6 +1,5 @@
 package com.spring.starter.components;
 
-import com.spring.starter.Repository.BillPaymentRepository;
 import com.spring.starter.Repository.CSRQueueRepository;
 import com.spring.starter.Repository.TellerQueueRepository;
 import com.spring.starter.model.CSRQueue;
@@ -30,7 +29,6 @@ public class SheduleMethods {
         csrQueueRepository.deleteAll();
         javax.persistence.Query q2 = em.createNativeQuery("ALTER TABLE csr_queue AUTO_INCREMENT = 1", CSRQueue.class);
         q2.executeUpdate();
-
     }
 
     public void migrateAndDeleteDataTeller(){
@@ -39,7 +37,6 @@ public class SheduleMethods {
         tellerQueueRepository.deleteAll();
         javax.persistence.Query q2 = em.createNativeQuery("ALTER TABLE teller_queue AUTO_INCREMENT = 1", TellerQueue.class);
         q2.executeUpdate();
-
     }
 
 }

@@ -61,6 +61,8 @@ public interface TrancsactionRequestService {
 
     public ResponseEntity<?> addCSRAuthorizeDataToATransaction(CSRDataTransaction csrDataTransaction , Principal principal, int requestId);
 
+    public ResponseEntity<?> getUncompletedRequests(int customerId);
+
 
 
 

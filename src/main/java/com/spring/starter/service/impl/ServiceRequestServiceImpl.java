@@ -522,6 +522,15 @@ public class ServiceRequestServiceImpl implements ServiceRequestService {
         }
     }
 
+    public ResponseEntity<?> getUncompletedRequests(int customerId){
+        List<CustomerServiceRequest> customerServiceRequests = customerServiceRequestRepository.getAllCustomerRequest(customerId);
+        if(customerServiceRequests.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(customerServiceRequests,HttpStatus.OK);
+        }
+    }
+
     public ResponseEntity<?> completeAllCustomerRequests(Principal principal, int customerId) {
         ResponseModel responsemodel = new ResponseModel();
         Optional<Customer> customerOpt = customerRepository.findById(customerId);

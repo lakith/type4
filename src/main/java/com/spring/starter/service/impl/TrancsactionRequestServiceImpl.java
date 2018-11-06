@@ -92,6 +92,15 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         }
     }
 
+    public ResponseEntity<?> getUncompletedRequests(int customerId){
+        List<CustomerTransactionRequest> customerTransactionRequests = customerTransactionRequestRepository.getAllUncompleteeRequests(customerId);
+        if(customerTransactionRequests.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(customerTransactionRequests,HttpStatus.OK);
+        }
+    }
+
     @Override
     public ResponseEntity<?> viewTransactionRequest (int customerTransactionRequest) {
         ResponseModel responseModel = new ResponseModel();
@@ -189,6 +198,8 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         }
 
     }
+
+
     @Override
     public ResponseEntity<?> addCustomer(TransactionCustomer transactionCustomer){
         ResponseModel responseModel = new ResponseModel();

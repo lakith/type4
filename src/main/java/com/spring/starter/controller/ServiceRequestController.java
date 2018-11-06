@@ -160,4 +160,9 @@ public class ServiceRequestController {
     public ResponseEntity<?> sendforAuthorize(@RequestParam(name = "requestId") int requestId) throws Exception {
         return serviceRequestService.sendTOAuthorizer(requestId);
     }
+
+    @GetMapping("/get-Uncompleted-requests")
+    public ResponseEntity<?> getUncompletedRequests(@RequestParam(name = "customreServiceRequestId") int customreServiceRequestId ){
+        return serviceRequestService.getUncompletedRequests(customreServiceRequestId);
+    }
 }

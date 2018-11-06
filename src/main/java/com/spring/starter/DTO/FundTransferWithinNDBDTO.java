@@ -13,13 +13,23 @@ public class FundTransferWithinNDBDTO implements Serializable {
     @NotNull
     @Min(value = 2,message = "Insert Valid Account Number To Continue")
     private long fromAccount;
+
+    @NotNull
+    @Size(min = 2)
+    private String fromAccountName;
+
     @NotNull
     @Size(min = 2)
     private String fromAccountType;
     @NotNull
-    private String currency;
+    private int currencyId;
     @NotNull
     private double amount;
+
+    @NotNull
+    @Size(min = 2)
+    private String toAccountName;
+
     @NotNull
     @Min(value = 2,message = "Insert Valid Account Number To Continue")
     private long toAccount;
@@ -29,11 +39,11 @@ public class FundTransferWithinNDBDTO implements Serializable {
     public FundTransferWithinNDBDTO() {
     }
 
-    public FundTransferWithinNDBDTO(@NotNull Date date, @NotNull @Min(value = 2, message = "Insert Valid Account Number To Continue") long fromAccount, @NotNull @Size(min = 2) String fromAccountType, @NotNull String currency, @NotNull double amount, @NotNull @Min(value = 2, message = "Insert Valid Account Number To Continue") long toAccount, @NotNull int branchId) {
+    public FundTransferWithinNDBDTO(@NotNull Date date, @NotNull @Min(value = 2, message = "Insert Valid Account Number To Continue") long fromAccount, @NotNull @Size(min = 2) String fromAccountType, @NotNull int currencyId, @NotNull double amount, @NotNull @Min(value = 2, message = "Insert Valid Account Number To Continue") long toAccount, @NotNull int branchId) {
         this.date = date;
         this.fromAccount = fromAccount;
         this.fromAccountType = fromAccountType;
-        this.currency = currency;
+        this.currencyId = currencyId;
         this.amount = amount;
         this.toAccount = toAccount;
         this.branchId = branchId;
@@ -63,12 +73,12 @@ public class FundTransferWithinNDBDTO implements Serializable {
         this.fromAccountType = fromAccountType;
     }
 
-    public String getCurrency() {
-        return currency;
+    public int getCurrencyId() {
+        return currencyId;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setCurrencyId(int currencyId) {
+        this.currencyId = currencyId;
     }
 
     public double getAmount() {
@@ -93,5 +103,21 @@ public class FundTransferWithinNDBDTO implements Serializable {
 
     public void setBranchId(int branchId) {
         this.branchId = branchId;
+    }
+
+    public String getFromAccountName() {
+        return fromAccountName;
+    }
+
+    public void setFromAccountName(String fromAccountName) {
+        this.fromAccountName = fromAccountName;
+    }
+
+    public String getToAccountName() {
+        return toAccountName;
+    }
+
+    public void setToAccountName(String toAccountName) {
+        this.toAccountName = toAccountName;
     }
 }

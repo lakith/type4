@@ -19,9 +19,15 @@ public class CashWithdrawal implements Serializable {
     private double amount;
     private String amountInWords;
     private String identity;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cashWithDrawalBreakDownID")
+    CashWithDrawalBreakDown cashWithDrawalBreakDown;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BranchId")
-    private  NDBBranch ndbBranch;
+    private  Branch branch;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerTransactionRequestId")
     private CustomerTransactionRequest customerTransactionRequest;
@@ -39,10 +45,7 @@ public class CashWithdrawal implements Serializable {
     public CashWithdrawal() {
     }
 
-    public CashWithdrawal(Date date, long accountNo, String accountHolder, String currency, double amount,
-                          String amountInWords, String identity, NDBBranch ndbBranch,
-                          CustomerTransactionRequest customerTransactionRequest,
-                          List<CashWithdrawalFile> cashWithdrawalFile, String signatureUrl) {
+    public CashWithdrawal(Date date, long accountNo, String accountHolder, String currency, double amount, String amountInWords, String identity, CashWithDrawalBreakDown cashWithDrawalBreakDown, Branch branch, CustomerTransactionRequest customerTransactionRequest, List<CashWithdrawalFile> cashWithdrawalFile, String signatureUrl, boolean status, Date requestCompleteDate) {
         this.date = date;
         this.accountNo = accountNo;
         this.accountHolder = accountHolder;
@@ -50,10 +53,13 @@ public class CashWithdrawal implements Serializable {
         this.amount = amount;
         this.amountInWords = amountInWords;
         this.identity = identity;
-        this.ndbBranch = ndbBranch;
+        this.cashWithDrawalBreakDown = cashWithDrawalBreakDown;
+        this.branch = branch;
         this.customerTransactionRequest = customerTransactionRequest;
         this.cashWithdrawalFile = cashWithdrawalFile;
         this.signatureUrl = signatureUrl;
+        this.status = status;
+        this.requestCompleteDate = requestCompleteDate;
     }
 
     public List<CashWithdrawalFile> getCashWithdrawalFile() {
@@ -128,12 +134,12 @@ public class CashWithdrawal implements Serializable {
         this.identity = identity;
     }
 
-    public NDBBranch getNdbBranch() {
-        return ndbBranch;
+    public Branch getBranch() {
+        return branch;
     }
 
-    public void setNdbBranch(NDBBranch ndbBranch) {
-        this.ndbBranch = ndbBranch;
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
 
     public CustomerTransactionRequest getCustomerTransactionRequest() {
@@ -166,5 +172,13 @@ public class CashWithdrawal implements Serializable {
 
     public void setRequestCompleteDate(Date requestCompleteDate) {
         this.requestCompleteDate = requestCompleteDate;
+    }
+
+    public CashWithDrawalBreakDown getCashWithDrawalBreakDown() {
+        return cashWithDrawalBreakDown;
+    }
+
+    public void setCashWithDrawalBreakDown(CashWithDrawalBreakDown cashWithDrawalBreakDown) {
+        this.cashWithDrawalBreakDown = cashWithDrawalBreakDown;
     }
 }

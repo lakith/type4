@@ -5,6 +5,7 @@ import com.spring.starter.DTO.CashWithdrawalDTO;
 import com.spring.starter.DTO.FileDTO;
 import com.spring.starter.DTO.DetailsUpdateDTO;
 import com.spring.starter.DTO.TransactionSignatureDTO;
+import com.spring.starter.model.CashWithDrawalBreakDown;
 import com.spring.starter.service.CashWithdrawalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -76,6 +77,11 @@ public class CashWithdrawalController {
     @GetMapping("cash-withdrawal-update-records")
     public ResponseEntity<?> getBillPaymentUpdateRecords(@RequestParam(name="requestId") int requestId) {
         return cashWithdrawalService.getCashWithdrawalUpdateRecords(requestId);
+    }
+
+    @PostMapping("/cash-withdrawal-denominations")
+    private ResponseEntity<?> cashWithdrawalDenominations(@RequestParam(name="requestId") int requestId,CashWithDrawalBreakDown cashWithDrawalBreakDown){
+        return  cashWithdrawalService.cashWithdrawalBreakdown(requestId,cashWithDrawalBreakDown);
     }
 
 }

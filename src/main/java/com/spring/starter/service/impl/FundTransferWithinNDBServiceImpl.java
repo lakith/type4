@@ -4,6 +4,7 @@ import com.spring.starter.DTO.*;
 import com.spring.starter.Repository.*;
 import com.spring.starter.configuration.TransactionIdConfig;
 import com.spring.starter.model.*;
+import com.spring.starter.model.Currency;
 import com.spring.starter.service.FundTransferWithinNDBService;
 import com.spring.starter.util.FileStorage;
 import org.apache.commons.io.FilenameUtils;
@@ -35,6 +36,8 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
     private FundTransferWithinNDBUpdateRecordRepository fundTransferWithinNDBUpdateRecordRepository;
     @Autowired
     private FundTransferWithinNDBErrorRecordsRepository fundTransferWithinNDBErrorRecordsRepository;
+    @Autowired
+    private CurrencyRepository currencyRepository;
 
     private ResponseModel responseModel = new ResponseModel();
 
@@ -71,14 +74,20 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
             if(optional.isPresent()){
                 fundTransferWithinNDB.setFundTransferWithinNdbId(optional.get().getFundTransferWithinNdbId());
             }
+            Optional<Currency> currencyOptional = currencyRepository.findById(fundTransferWithinNDBDTO.getCurrencyId());
+            if(!currencyOptional.isPresent()){
+                return new ResponseEntity<>(new ResponseModel("invaliedCurrencyDetails",false),HttpStatus.OK);
+            }
 
             fundTransferWithinNDB.setCustomerTransactionRequest(customerTransactionRequest.get());
             fundTransferWithinNDB.setBranch(branchOptional.get());
             fundTransferWithinNDB.setDate(fundTransferWithinNDBDTO.getDate());
             fundTransferWithinNDB.setFromAccount(fundTransferWithinNDBDTO.getFromAccount());
             fundTransferWithinNDB.setFromAccountType(fundTransferWithinNDBDTO.getFromAccountType());
-            fundTransferWithinNDB.setCurrency(fundTransferWithinNDBDTO.getCurrency());
+            fundTransferWithinNDB.setCurrency(currencyOptional.get());
             fundTransferWithinNDB.setAmount(fundTransferWithinNDBDTO.getAmount());
+            fundTransferWithinNDB.setToAccount(fundTransferWithinNDBDTO.getToAccount());
+            fundTransferWithinNDB.setFromAccountName(fundTransferWithinNDBDTO.getFromAccountName());
             fundTransferWithinNDB.setToAccount(fundTransferWithinNDBDTO.getToAccount());
 
             FundTransferWithinNDB ndb=fundTransferWithinNDBRepository.save(fundTransferWithinNDB);
@@ -222,6 +231,11 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
             return new ResponseEntity<>(responseModel,HttpStatus.BAD_REQUEST);
         }
 
+        Optional<Currency> currencyOptional = currencyRepository.findById(fundTransferWithinNDBDTO.getCurrencyId());
+        if(!currencyOptional.isPresent()){
+            return new ResponseEntity<>(new ResponseModel("invaliedCurrencyDetails",false),HttpStatus.OK);
+        }
+
         FundTransferWithinNDB fundTransferWithinNDB= new FundTransferWithinNDB();
         fundTransferWithinNDB.setFundTransferWithinNdbId(optionalFundTransferWithinNDB.get().getFundTransferWithinNdbId());
         fundTransferWithinNDB.setCustomerTransactionRequest(customerTransactionRequest.get());
@@ -229,7 +243,7 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
         fundTransferWithinNDB.setDate(fundTransferWithinNDBDTO.getDate());
         fundTransferWithinNDB.setFromAccount(fundTransferWithinNDBDTO.getFromAccount());
         fundTransferWithinNDB.setFromAccountType(fundTransferWithinNDBDTO.getFromAccountType());
-        fundTransferWithinNDB.setCurrency(fundTransferWithinNDBDTO.getCurrency());
+        fundTransferWithinNDB.setCurrency(currencyOptional.get());
         fundTransferWithinNDB.setAmount(fundTransferWithinNDBDTO.getAmount());
         fundTransferWithinNDB.setToAccount(fundTransferWithinNDBDTO.getToAccount());
 

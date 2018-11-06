@@ -1,6 +1,7 @@
 package com.spring.starter.service.impl;
 
 import com.spring.starter.DTO.*;
+import com.spring.starter.Exception.CustomException;
 import com.spring.starter.Repository.*;
 import com.spring.starter.configuration.TransactionIdConfig;
 import com.spring.starter.model.*;
@@ -24,10 +25,12 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
 
     @Autowired
     private CashWithdrawalRepository cashWithdrawalRepository;
+
     @Autowired
     private CustomerTransactionRequestRepository customerTransactionRequestRepository;
+
     @Autowired
-    private NDBBranchRepository ndbBranchRepository;
+    private BranchRepository branchRepository;
 
     @Autowired
     private FileStorage fileStorage;
@@ -40,6 +43,9 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
 
     @Autowired
     CashWithdrawalUpdateRecordsRepository cashWithdrawalUpdateRecordsRepository;
+
+    @Autowired
+    CashWithDrawalBreakDownRepositroy cashWithDrawalBreakDownRepositroy;
 
 
     private ResponseModel responseModel = new ResponseModel();
@@ -59,7 +65,7 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
                 return new ResponseEntity<>(responseModel,HttpStatus.BAD_REQUEST);
             }
 
-            Optional<NDBBranch> branchOptional= ndbBranchRepository.findById(cashWithdrawalDTO.getNdbBranchId());
+            Optional<Branch> branchOptional= branchRepository.findById(cashWithdrawalDTO.getNdbBranchId());
 
             if(!branchOptional.isPresent()){
                 responseModel.setMessage("Invalid Bank Branch");
@@ -80,7 +86,7 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
             }
 
             cashWithdrawal.setCustomerTransactionRequest(customerTransactionRequest.get());
-            cashWithdrawal.setNdbBranch(branchOptional.get());
+            cashWithdrawal.setBranch(branchOptional.get());
             cashWithdrawal.setDate(cashWithdrawalDTO.getDate());
             cashWithdrawal.setAccountNo(cashWithdrawalDTO.getAccountNo());
             cashWithdrawal.setAccountHolder(cashWithdrawalDTO.getAccountHolder());
@@ -105,6 +111,32 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
     }
 
     @Override
+    public ResponseEntity<?> cashWithdrawalBreakdown(int cashwithdrawalID,CashWithDrawalBreakDown cashWithDrawalBreakDown){
+        Optional<CashWithdrawal> cashWithdrawal = cashWithdrawalRepository.findById(cashwithdrawalID);
+        if(!cashWithdrawal.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            cashWithDrawalBreakDown.setCashWithdrawal(cashWithdrawal.get());
+            try {
+                cashWithDrawalBreakDown = cashWithDrawalBreakDownRepositroy.save(cashWithDrawalBreakDown);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+            CashWithdrawal ca = cashWithdrawal.get();
+            ca.setCashWithDrawalBreakDown(cashWithDrawalBreakDown);
+
+            try {
+                ca = cashWithdrawalRepository.save(ca);
+                return new ResponseEntity<>(ca,HttpStatus.OK);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+        }
+    }
+
+    @Override
     public ResponseEntity<?> updateCashWithdrawal (CashWithdrawalDTO cashWithdrawalDTO, int customerTransactionRequestId, DetailsUpdateDTO detailsUpdateDTO) throws Exception {
 
         CashWithdrawal cashWithdrawal = new CashWithdrawal();
@@ -122,9 +154,9 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
             responseModel.setStatus(false);
             return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
         }
-        Optional<NDBBranch> branchOptional;
+        Optional<Branch> branchOptional;
         try {
-            branchOptional = ndbBranchRepository.findById(cashWithdrawalDTO.getNdbBranchId());
+            branchOptional = branchRepository.findById(cashWithdrawalDTO.getNdbBranchId());
         } catch (Exception e){
             throw new Exception(e.getMessage());
         }
@@ -156,7 +188,7 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
         }
 
         cashWithdrawal.setCustomerTransactionRequest(customerTransactionRequest.get());
-        cashWithdrawal.setNdbBranch(branchOptional.get());
+        cashWithdrawal.setBranch(branchOptional.get());
         cashWithdrawal.setDate(cashWithdrawalDTO.getDate());
         cashWithdrawal.setAccountNo(cashWithdrawalDTO.getAccountNo());
         cashWithdrawal.setAccountHolder(cashWithdrawalDTO.getAccountHolder());
@@ -456,11 +488,11 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
             cashWithDrawalRecordErrors = cashWithDrawalRecordErrorsRepository.save(cashWithDrawalRecordErrors);
             listofcashWithDrawalRecordErrors.add(cashWithDrawalRecordErrors);
         }
-        if(cashWithdrawalOld.getNdbBranch().getId() != cashWithdrawalNew.getNdbBranch().getId()){
+        if(cashWithdrawalOld.getBranch().getBranch_id() != cashWithdrawalNew.getBranch().getBranch_id()){
             cashWithDrawalRecordErrors = new CashWithDrawalRecordErrors();
 
-            cashWithDrawalRecordErrors.setOldValue("ndbBranch:"+cashWithdrawalOld.getNdbBranch().getBranch_name());
-            cashWithDrawalRecordErrors.setNewValue("ndbBranch:"+cashWithdrawalNew.getNdbBranch().getBranch_name());
+            cashWithDrawalRecordErrors.setOldValue("ndbBranch:"+cashWithdrawalOld.getBranch().getMx_branch_name());
+            cashWithDrawalRecordErrors.setNewValue("ndbBranch:"+cashWithdrawalNew.getBranch().getMx_branch_name());
             cashWithDrawalRecordErrors.setCashWithdrawalUpdateRecords(cashWithdrawalUpdateRecords);
             cashWithDrawalRecordErrors = cashWithDrawalRecordErrorsRepository.save(cashWithDrawalRecordErrors);
             listofcashWithDrawalRecordErrors.add(cashWithDrawalRecordErrors);

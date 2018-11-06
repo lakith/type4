@@ -1,5 +1,6 @@
 package com.spring.starter.service.impl;
 
+import com.spring.starter.DTO.CSRDisplayDTO;
 import com.spring.starter.DTO.CSRQueueDTO;
 import com.spring.starter.Inherite.DefaultResponnsesQueue;
 import com.spring.starter.Repository.CSRQueueRepository;
@@ -62,7 +63,22 @@ public class CSRQueueServiceImpl extends DefaultResponnsesQueue implements CSRQu
 
         try {
             csrQueue = csrQueueRepository.save(csrQueue);
-            return new ResponseEntity<>(csrQueue,HttpStatus.OK);
+            CSRDisplayDTO csrDisplayDTO = new CSRDisplayDTO();
+            csrDisplayDTO.setSuccess(true);
+            csrDisplayDTO.setMessage(csrQueue.getQueueNumber());
+            csrDisplayDTO.setCsrQueue(csrQueue);
+            csrDisplayDTO.setCSRQueueId(csrQueue.getCSRQueueId());
+            csrDisplayDTO.setCustomer(csrQueue.getCustomer());
+            csrDisplayDTO.setQueueNumber(csrQueue.getQueueNumber());
+            csrDisplayDTO.setComplete(csrQueue.isComplete());
+            csrDisplayDTO.setComment(csrQueue.getComment());
+            csrDisplayDTO.setHold(csrQueue.isHold());
+            csrDisplayDTO.setQueueReject(csrQueue.isQueueReject());
+            csrDisplayDTO.setQueuePending(csrQueue.isQueuePending());
+            csrDisplayDTO.setQueueStartDate(csrQueue.getQueueStartDate());
+            csrDisplayDTO.setQueueEndDate(csrQueue.getQueueEndDate());
+            csrDisplayDTO.setQueueNumIdentification(csrQueue.getQueueNumIdentification());
+            return new ResponseEntity<>(csrDisplayDTO,HttpStatus.OK);
         } catch (ConstraintViolationException e)
         {
             return new ResponseEntity<>(returnQueueNumber(currentQueueNumber+1,customerOptional),HttpStatus.OK);
@@ -297,7 +313,23 @@ public class CSRQueueServiceImpl extends DefaultResponnsesQueue implements CSRQu
         csrQueue.setCustomer(customerOptional.get());
 
         csrQueue = csrQueueRepository.save(csrQueue);
-        return new ResponseEntity<>(csrQueue,HttpStatus.CREATED);
+
+        CSRDisplayDTO csrDisplayDTO = new CSRDisplayDTO();
+        csrDisplayDTO.setSuccess(true);
+        csrDisplayDTO.setMessage(csrQueue.getQueueNumber());
+        csrDisplayDTO.setCsrQueue(csrQueue);
+        csrDisplayDTO.setCSRQueueId(csrQueue.getCSRQueueId());
+        csrDisplayDTO.setCustomer(csrQueue.getCustomer());
+        csrDisplayDTO.setQueueNumber(csrQueue.getQueueNumber());
+        csrDisplayDTO.setComplete(csrQueue.isComplete());
+        csrDisplayDTO.setComment(csrQueue.getComment());
+        csrDisplayDTO.setHold(csrQueue.isHold());
+        csrDisplayDTO.setQueueReject(csrQueue.isQueueReject());
+        csrDisplayDTO.setQueuePending(csrQueue.isQueuePending());
+        csrDisplayDTO.setQueueStartDate(csrQueue.getQueueStartDate());
+        csrDisplayDTO.setQueueEndDate(csrQueue.getQueueEndDate());
+        csrDisplayDTO.setQueueNumIdentification(csrQueue.getQueueNumIdentification());
+        return new ResponseEntity<>(csrDisplayDTO,HttpStatus.CREATED);
     }
 
     private ResponseEntity<?> returnprorityQueueNumber(double currentQueueNumber,Optional<Customer> customerOptional){
