@@ -21,7 +21,7 @@ public class ReissueLoginPasswordModel {
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="branchId")
-	private NDBBranch branch;
+	private Branch branch;
 	
 	private boolean postToCorrespondenceAddress = false;
 	
@@ -40,7 +40,7 @@ public class ReissueLoginPasswordModel {
 	}
 
 	public ReissueLoginPasswordModel(int reissueLoginPasswordModelId, @NotNull @NotEmpty String bankingUserId,
-			boolean atBranch, NDBBranch branch, boolean postToCorrespondenceAddress, boolean postToAddress,
+			boolean atBranch, Branch branch, boolean postToCorrespondenceAddress, boolean postToAddress,
 			String addresss, CustomerServiceRequest customerServiceRequest) {
 		super();
 		this.reissueLoginPasswordModelId = reissueLoginPasswordModelId;
@@ -54,7 +54,7 @@ public class ReissueLoginPasswordModel {
 	}
 
 	public ReissueLoginPasswordModel(int reissueLoginPasswordModelId, @NotNull @NotEmpty String bankingUserId,
-			boolean atBranch, NDBBranch branch, boolean postToCorrespondenceAddress, String addresss) {
+			boolean atBranch, Branch branch, boolean postToCorrespondenceAddress, String addresss) {
 		super();
 		this.reissueLoginPasswordModelId = reissueLoginPasswordModelId;
 		this.bankingUserId = bankingUserId;
@@ -64,9 +64,7 @@ public class ReissueLoginPasswordModel {
 		this.addresss = addresss;
 	}
 
-	public void setBranch(NDBBranch branch) {
-		this.branch = branch;
-	}
+
 
 	public int getReissueLoginPasswordModelId() {
 		return reissueLoginPasswordModelId;
@@ -116,8 +114,12 @@ public class ReissueLoginPasswordModel {
 		this.customerServiceRequest = customerServiceRequest;
 	}
 
-	public NDBBranch getBranch() {
+	public Branch getBranch() {
 		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
 	}
 
 	public boolean isPostToAddress() {
