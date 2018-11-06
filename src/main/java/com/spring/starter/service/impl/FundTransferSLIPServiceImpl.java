@@ -160,7 +160,7 @@ public class FundTransferSLIPServiceImpl implements FundTransferSLIPService {
 
                 try {
                     fundTransferSLIPRepository.save(fundTransferSLIPS);
-                    responseModel.setMessage("file uploded succesfully");
+                    responseModel.setMessage("file upload successfully");
                     responseModel.setStatus(false);
                     return new ResponseEntity<>(responseModel,HttpStatus.CREATED);
                 } catch (Exception e) {

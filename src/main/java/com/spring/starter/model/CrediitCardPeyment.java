@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "crediit_card_peyment")
@@ -66,6 +67,12 @@ public class CrediitCardPeyment {
 
         private boolean status;
 
+        private String url;
+
+        @OneToMany(fetch = FetchType.LAZY)
+        @JoinColumn(name = "crediitCardPeymentId")
+        private List<CreditCardPaymentFiles> creditCardPaymentFiles;
+
         @OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "customerTransactionRequestId")
         private CustomerTransactionRequest customerTransactionRequest;
@@ -74,7 +81,7 @@ public class CrediitCardPeyment {
         @JoinColumn(name = "creditCardPaymentBreakDownId")
         private CreditCardPaymentBreakDown creditCardPaymentBreakDown;
 
-    public CrediitCardPeyment(@NotNull @NotEmpty @Size(min = 9, max = 10, message = "mobile number must be between 9 and 10") @Pattern(regexp = "^([+0-9])*$") String telephoneNumber, @NotNull @Pattern(regexp = "^(CASH|CHEQUE)$") String paymenntMethod, Bank bank, Branch branch, String chequenumber, double ammount, Date date, int valueOf5000Notes, int valueOf2000Notes, int valueof1000Notes, int valueOf500Notes, int valueOf100Notes, int valueOf50Notes, int valueOf20Notes, int valueOf10Notes, double valueOfcoins, @NotNull double total, String signatureUrl, Date requestCompleteDate, boolean status, CustomerTransactionRequest customerTransactionRequest, CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
+    public CrediitCardPeyment(@NotNull @NotEmpty @Size(min = 9, max = 10, message = "mobile number must be between 9 and 10") @Pattern(regexp = "^([+0-9])*$") String telephoneNumber, @NotNull @Pattern(regexp = "^(CASH|CHEQUE)$") String paymenntMethod, Bank bank, Branch branch, String chequenumber, double ammount, Date date, int valueOf5000Notes, int valueOf2000Notes, int valueof1000Notes, int valueOf500Notes, int valueOf100Notes, int valueOf50Notes, int valueOf20Notes, int valueOf10Notes, double valueOfcoins, @NotNull double total, String signatureUrl, Date requestCompleteDate, boolean status, String url, List<CreditCardPaymentFiles> creditCardPaymentFiles, CustomerTransactionRequest customerTransactionRequest, CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
         this.telephoneNumber = telephoneNumber;
         this.paymenntMethod = paymenntMethod;
         this.bank = bank;
@@ -95,6 +102,8 @@ public class CrediitCardPeyment {
         this.signatureUrl = signatureUrl;
         this.requestCompleteDate = requestCompleteDate;
         this.status = status;
+        this.url = url;
+        this.creditCardPaymentFiles = creditCardPaymentFiles;
         this.customerTransactionRequest = customerTransactionRequest;
         this.creditCardPaymentBreakDown = creditCardPaymentBreakDown;
     }
@@ -284,5 +293,21 @@ public class CrediitCardPeyment {
 
     public void setCreditCardPaymentBreakDown(CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
         this.creditCardPaymentBreakDown = creditCardPaymentBreakDown;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public List<CreditCardPaymentFiles> getCreditCardPaymentFiles() {
+        return creditCardPaymentFiles;
+    }
+
+    public void setCreditCardPaymentFiles(List<CreditCardPaymentFiles> creditCardPaymentFiles) {
+        this.creditCardPaymentFiles = creditCardPaymentFiles;
     }
 }

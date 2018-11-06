@@ -1,5 +1,7 @@
 package com.spring.starter.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.starter.DTO.DetailsUpdateDTO;
 import com.spring.starter.model.Bank;
 import com.spring.starter.model.Branch;
 import com.spring.starter.model.CrediitCardPeyment;
@@ -8,6 +10,7 @@ import com.spring.starter.service.CreditCardPeymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -24,6 +27,12 @@ public class CreditCardPeymentController {
         return creditCardPeymentService.addCreditCardPeyment(crediitCardPeyment,requestId);
     }
 
+    @PutMapping
+    public ResponseEntity<?> upadteCreditCardPayment(@RequestBody @Valid CrediitCardPeyment crediitCardPeyment
+            ,@RequestParam(name="requestId") int requestId) throws Exception {
+        return creditCardPeymentService.addCreditCardPeyment(crediitCardPeyment,requestId);
+    }
+
     @GetMapping("/{creditCardPaymentId}")
     public ResponseEntity<?> getCreditCardPayment(@PathVariable int creditCardPaymentId){
         return creditCardPeymentService.getCreditCardPaymentRequest(creditCardPaymentId);
@@ -33,6 +42,45 @@ public class CreditCardPeymentController {
     private ResponseEntity<?> paymentDenominations(@RequestParam(name="requestId") int requestId,CreditCardPaymentBreakDown breakDown){
         return  creditCardPeymentService.creditCardPaymentBreakdown(requestId,breakDown);
     }
+
+    @PutMapping("/add-signaute-and-update")
+    public ResponseEntity<?> addSignatureForSLIP(@RequestParam MultipartFile file,
+                                                 @RequestParam int customerTrasactionRequestId,
+                                                 @RequestParam(required = false) String message) {
+        return creditCardPeymentService.addSignatureForCardPayment(file,customerTrasactionRequestId);
+    }
+
+    @PutMapping("/add-files")
+    public ResponseEntity<?> addFilesForSLIP(@RequestParam MultipartFile file,
+                                             @RequestParam int customerTrasactionRequestId,
+                                             @RequestParam String fileType){
+        return creditCardPeymentService.addFileToSLIPCardPayment(file,fileType,customerTrasactionRequestId);
+    }
+
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateCashDeposit(@RequestParam MultipartFile file,
+                                               @RequestParam String fundTransfer,
+                                               @RequestParam int customerServiceRequestId,
+                                               @RequestParam(required = false) String comment) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        CrediitCardPeyment crediitCardPeyment = mapper.readValue(fundTransfer, CrediitCardPeyment.class);
+
+        DetailsUpdateDTO detailsUpdateDTO = new DetailsUpdateDTO();
+        detailsUpdateDTO.setComment(comment);
+        detailsUpdateDTO.setFile(file);
+
+        return creditCardPeymentService.updateCardPayment(crediitCardPeyment,customerServiceRequestId, detailsUpdateDTO);
+    }
+
+    @GetMapping("/credit-card-payment-update-records")
+    public ResponseEntity<?> getCreditCardPaymentUpdateRecords(@RequestParam(name="requestId") int requestId) {
+        return creditCardPeymentService.getCardPaymentUpdateRecords(requestId);
+    }
+
+
 
     @GetMapping
     public CrediitCardPeyment test(){
@@ -45,7 +93,7 @@ public class CreditCardPeymentController {
 
         CrediitCardPeyment crediitCardPeyment = new CrediitCardPeyment();
         crediitCardPeyment.setTelephoneNumber("0342252011");
-        crediitCardPeyment.setPaymenntMethod("CASH");
+        crediitCardPeyment.setPaymenntMethod("cash");
         crediitCardPeyment.setBank(bank);
         crediitCardPeyment.setBranch(branch);
         crediitCardPeyment.setChequenumber("1232132132");

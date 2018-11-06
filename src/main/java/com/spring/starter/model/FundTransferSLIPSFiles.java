@@ -17,7 +17,7 @@ public class FundTransferSLIPSFiles {
     private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cashWithdrawalId")
+    @JoinColumn(name = "fundTransferSLIPSId")
     @JsonIgnore
     private FundTransferSLIPS fundTransferSLIPS;
 
