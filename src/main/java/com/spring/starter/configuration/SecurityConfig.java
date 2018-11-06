@@ -165,6 +165,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/CSR-Queue/continue-a-hold-token").permitAll()
                 .antMatchers("/CSR-Queue/genarate-an-special-queue-number").permitAll()
                 .antMatchers("/CSR-Queue/genarate-redundent-token").permitAll()
+                .antMatchers("/Teller-Queue/genarate-token").permitAll()
+                .antMatchers("/Teller-Queue/get-queue-list").permitAll()
+                .antMatchers("/Teller-Queue/get-hold-queue-list").permitAll()
+                .antMatchers("/Teller-Queue/get-pending-queue-list").permitAll()
+                .antMatchers("/Teller-Queue/hold-a-queue-number").permitAll()
+                .antMatchers("/Teller-Queue/complete-a-queue-number").permitAll()
+                .antMatchers("/Teller-Queue/get-completed-queue-list").permitAll()
+                .antMatchers("/Teller-Queue/continue-a-hold-token").permitAll()
+                .antMatchers("/Teller-Queue/genarate-an-special-queue-number").permitAll()
+                .antMatchers("/Teller-Queue/genarate-redundent-token").permitAll()
                 .anyRequest().authenticated();
     }
 }
