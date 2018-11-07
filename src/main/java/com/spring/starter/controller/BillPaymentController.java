@@ -55,8 +55,8 @@ public class BillPaymentController {
         return billPaymentService.updateBillPayment(billPayment,customerServiceRequestId,billPaymentUpdateDTO);
     }
 
-    @GetMapping("/cashBreakdownAdd")
-    public  ResponseEntity<?> cashBreakdown(int billpaymentId, BillPaymentCashBreakDown billPaymentCashBreakDown){
+    @PostMapping("/cashBreakdownAdd")
+    public  ResponseEntity<?> cashBreakdown(@RequestParam(name="requestId") int billpaymentId,@RequestBody @Valid BillPaymentCashBreakDown billPaymentCashBreakDown){
         return billPaymentService.setBillpaymentDenomination(billpaymentId,billPaymentCashBreakDown);
     }
 

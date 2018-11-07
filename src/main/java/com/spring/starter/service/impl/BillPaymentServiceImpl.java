@@ -351,7 +351,7 @@ public class BillPaymentServiceImpl implements BillPaymentService {
 
 
             if(billPaymentUpdateRecords == null) {
-                responseModel.setMessage("Something went wrong with the db connection");
+                responseModel.setMessage("Something went wrong with the db connection.");
                 responseModel.setStatus(false);
                 return new ResponseEntity<>(responseModel,HttpStatus.SERVICE_UNAVAILABLE);
             } else {
@@ -359,7 +359,7 @@ public class BillPaymentServiceImpl implements BillPaymentService {
                     Optional<BillPaymentReferance> billPaymentReferanceOpt = billPaymentReferanceRepository.findById(billPayment.getBillPaymentReferance().getBillPaymentReferanceId());
 
                     if(!billPaymentReferanceOpt.isPresent()){
-                        responseModel.setMessage("Invalid bill response details");
+                        responseModel.setMessage("Invalid bill response details.");
                         responseModel.setStatus(false);
                         return new ResponseEntity<>(responseModel,HttpStatus.NO_CONTENT);
                     }
@@ -420,9 +420,9 @@ public class BillPaymentServiceImpl implements BillPaymentService {
         if(!billPaymentOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else {
-            Optional<CashDepositBreakDown> cashDepositBreakDown = cashBreakDownRepository.findBreakDown(billpaymentId);
+            Optional<BillPaymentCashBreakDown> cashDepositBreakDown = cashBreakDownRepository.findBreakDown(billpaymentId);
             if(cashDepositBreakDown.isPresent()){
-                billPaymentCashBreakDown.setBillPaymentCashBreakDownId(cashDepositBreakDown.get().getCashDepositBreakDownId());
+                billPaymentCashBreakDown.setBillPaymentCashBreakDownId(cashDepositBreakDown.get().getBillPaymentCashBreakDownId());
             }
             billPaymentCashBreakDown.setBillPayment(billPaymentOptional.get());
             try {
@@ -437,7 +437,7 @@ public class BillPaymentServiceImpl implements BillPaymentService {
 
             try {
                 billPayment = billPaymentRepository.save(billPayment);
-                return new ResponseEntity<>(billPayment,HttpStatus.OK);
+                return new ResponseEntity<>(billPaymentCashBreakDown,HttpStatus.OK);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());
             }
