@@ -134,6 +134,7 @@ public class CreditCardPeymentServiceImpl implements CreditCardPeymentService {
 
             creditCardPaymentBreakDown.setCrediitCardPeyment(optional.get());
             try {
+                creditCardPaymentBreakDown.setDate(java.util.Calendar.getInstance().getTime());
                 creditCardPaymentBreakDown = creditCardPaymentBreakDownRepository.save(creditCardPaymentBreakDown);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());

@@ -3,6 +3,7 @@ package com.spring.starter.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "fund_transfer_CEFT_breakDown")
@@ -33,6 +34,8 @@ public class FundTransferCEFTBreakDown {
     private double valueOfcoins;
 
     private double amount;
+
+    private Date date;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fundTransferCEFTId")
@@ -159,5 +162,13 @@ public class FundTransferCEFTBreakDown {
 
     public void setFundTransferCEFT(FundTransferCEFT fundTransferCEFT) {
         this.fundTransferCEFT = fundTransferCEFT;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

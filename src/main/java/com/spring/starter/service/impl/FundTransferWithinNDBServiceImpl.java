@@ -422,6 +422,7 @@ public class FundTransferWithinNDBServiceImpl implements FundTransferWithinNDBSe
             }
             breakDown.setFundTransferWithinNDB(optional.get());
             try {
+                breakDown.setDate(java.util.Calendar.getInstance().getTime());
                 breakDown = fundTransferWithinNDBBreakDownRepository.save(breakDown);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());

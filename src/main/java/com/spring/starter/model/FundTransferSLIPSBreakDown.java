@@ -3,6 +3,7 @@ package com.spring.starter.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "fund_transfer_SLIPS_breakDown")
@@ -13,6 +14,8 @@ public class FundTransferSLIPSBreakDown {
     private int fundTransferSLIPSBreakDownId;
 
     private String comment;
+
+    private Date date;
 
     private int valueOf5000Notes;
 
@@ -159,5 +162,13 @@ public class FundTransferSLIPSBreakDown {
 
     public void setFundTransferSLIPS(FundTransferSLIPS fundTransferSLIPS) {
         this.fundTransferSLIPS = fundTransferSLIPS;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

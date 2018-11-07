@@ -63,9 +63,6 @@ public interface TrancsactionRequestService {
 
     public ResponseEntity<?> getUncompletedRequests(int customerId);
 
-
-
-
-
+    public ResponseEntity<?> getAllTransactionRequests();
 
 }

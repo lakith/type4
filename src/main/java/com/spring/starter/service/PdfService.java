@@ -8,6 +8,4 @@ public interface PdfService {
 
     public ResponseEntity<?> dailyReport();
 
-    public ResponseEntity<?> tifGenarate();
-
 }

@@ -3,6 +3,7 @@ package com.spring.starter.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "fund_transfer_within_NDB_breakDown")
@@ -13,6 +14,8 @@ public class FundTransferWithinNDBBreakDown {
     private int fundTransferWithinNDBBreakDownId;
 
     private String comment;
+
+    private Date date;
 
     private int valueOf5000Notes;
 
@@ -159,5 +162,13 @@ public class FundTransferWithinNDBBreakDown {
 
     public void setFundTransferWithinNDB(FundTransferWithinNDB fundTransferWithinNDB) {
         this.fundTransferWithinNDB = fundTransferWithinNDB;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

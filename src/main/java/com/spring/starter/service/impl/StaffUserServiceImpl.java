@@ -281,6 +281,9 @@ public class StaffUserServiceImpl implements StaffUserService {
 			loginDisplayDTO.setBrowserKey(staffUserOpt.get().getBrowserKey());
 			loginDisplayDTO.setClientKey(staffUserOpt.get().getClientKey());
 			loginDisplayDTO.setStaffRole(staffUserOpt.get().getStaffRole());
+			loginDisplayDTO.setName(staffUserOpt.get().getName());
+			loginDisplayDTO.setEPFNumber(staffUserOpt.get().getEpfNumber());
+			loginDisplayDTO.setUserID(staffUserOpt.get().getStaffId());
 
 		return new ResponseEntity<>(loginDisplayDTO,HttpStatus.OK);
 		}else 

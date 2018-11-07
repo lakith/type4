@@ -589,6 +589,7 @@ public class CashDepositServiceImpl implements CashDepositService {
             }
             breakDown.setCashDeposit(optional.get());
             try {
+                breakDown.setDate(java.util.Calendar.getInstance().getTime());
                 breakDown = cashDepositBreakDownRepository.save(breakDown);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());

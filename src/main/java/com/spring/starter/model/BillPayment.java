@@ -83,6 +83,10 @@ public class BillPayment {
     @JoinColumn(name = "customerTransactionRequestId")
     private CustomerTransactionRequest customerTransactionRequest;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "billPaymentCashBreakDownId")
+    private BillPaymentCashBreakDown billPaymentCashBreakDown;
+
     public BillPayment() {
     }
 
@@ -284,5 +288,13 @@ public class BillPayment {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public BillPaymentCashBreakDown getBillPaymentCashBreakDown() {
+        return billPaymentCashBreakDown;
+    }
+
+    public void setBillPaymentCashBreakDown(BillPaymentCashBreakDown billPaymentCashBreakDown) {
+        this.billPaymentCashBreakDown = billPaymentCashBreakDown;
     }
 }

@@ -39,7 +39,7 @@ public class CreditCardPeymentController {
     }
 
     @PostMapping("/credit_card-payment-denominations")
-    private ResponseEntity<?> paymentDenominations(@RequestParam(name="requestId") int requestId,CreditCardPaymentBreakDown breakDown){
+    private ResponseEntity<?> paymentDenominations(@RequestParam(name="requestId") int requestId,@RequestBody @Valid CreditCardPaymentBreakDown breakDown){
         return  creditCardPeymentService.creditCardPaymentBreakdown(requestId,breakDown);
     }
 
@@ -79,8 +79,6 @@ public class CreditCardPeymentController {
     public ResponseEntity<?> getCreditCardPaymentUpdateRecords(@RequestParam(name="requestId") int requestId) {
         return creditCardPeymentService.getCardPaymentUpdateRecords(requestId);
     }
-
-
 
     @GetMapping
     public CrediitCardPeyment test(){

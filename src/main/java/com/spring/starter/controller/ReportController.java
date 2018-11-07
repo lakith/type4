@@ -15,13 +15,8 @@ public class ReportController {
     private PdfService pdfService;
 
     @GetMapping("/daily-report")
-    public ResponseEntity<?> dailyReport(){
-       return pdfService.dailyReport();
-    }
-
-    @GetMapping("/daily-transaction-report")
-    public ResponseEntity<?> dailyTifReport(){
-       return   pdfService.tifGenarate();
+    public ResponseEntity<?> dailyReport() {
+        return pdfService.dailyReport();
     }
 
 }

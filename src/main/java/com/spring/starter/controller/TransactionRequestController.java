@@ -64,6 +64,11 @@ public class TransactionRequestController {
         return trancsactionRequestService.getCustomerDetailsOfAIdentityFilterByDate(identification,date);
     }
 
+    @GetMapping("/get-all-transaction-requests")
+    public ResponseEntity<?> getAllTransactionRequests(){
+        return trancsactionRequestService.getAllTransactionRequests();
+    }
+
     @GetMapping("/get-trasanction-customer-records-filter-by-date")
     public ResponseEntity<?> getTransactionRecordsFilterByDate(@RequestParam("date") String date){
         return trancsactionRequestService.getTransactionCustomerDetailsFilterByDate(date);

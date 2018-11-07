@@ -3,6 +3,7 @@ package com.spring.starter.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "cash_withdrawal_break_down")
@@ -13,6 +14,8 @@ public class CashWithDrawalBreakDown {
     private int cashWithDrawalBreakDownId;
 
     private String comment;
+
+    private Date date;
 
     private int valueOf5000Notes;
 
@@ -159,5 +162,13 @@ public class CashWithDrawalBreakDown {
 
     public void setCashWithdrawal(CashWithdrawal cashWithdrawal) {
         this.cashWithdrawal = cashWithdrawal;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

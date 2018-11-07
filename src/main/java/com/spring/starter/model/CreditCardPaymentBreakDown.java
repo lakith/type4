@@ -1,6 +1,7 @@
 package com.spring.starter.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "credit_card_payment_breakDown")
@@ -9,6 +10,8 @@ public class CreditCardPaymentBreakDown {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int creditCardPaymentBreakDownId;
+
+    private Date date;
 
     private String comment;
 
@@ -156,5 +159,13 @@ public class CreditCardPaymentBreakDown {
 
     public void setCrediitCardPeyment(CrediitCardPeyment crediitCardPeyment) {
         this.crediitCardPeyment = crediitCardPeyment;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

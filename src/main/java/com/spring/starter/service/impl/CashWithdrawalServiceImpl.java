@@ -124,6 +124,7 @@ public class CashWithdrawalServiceImpl implements CashWithdrawalService {
 
             cashWithDrawalBreakDown.setCashWithdrawal(cashWithdrawal.get());
             try {
+                cashWithDrawalBreakDown.setDate(java.util.Calendar.getInstance().getTime());
                 cashWithDrawalBreakDown = cashWithDrawalBreakDownRepositroy.save(cashWithDrawalBreakDown);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());

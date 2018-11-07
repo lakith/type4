@@ -2,10 +2,7 @@ package com.spring.starter.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.starter.DTO.BillPaymentUpdateDTO;
-import com.spring.starter.model.BillPayment;
-import com.spring.starter.model.BillPaymentReferance;
-import com.spring.starter.model.Branch;
-import com.spring.starter.model.Currency;
+import com.spring.starter.model.*;
 import com.spring.starter.service.BillPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,6 +53,11 @@ public class BillPaymentController {
         billPaymentUpdateDTO.setFile(file);
 
         return billPaymentService.updateBillPayment(billPayment,customerServiceRequestId,billPaymentUpdateDTO);
+    }
+
+    @GetMapping("/cashBreakdownAdd")
+    public  ResponseEntity<?> cashBreakdown(int billpaymentId, BillPaymentCashBreakDown billPaymentCashBreakDown){
+        return billPaymentService.setBillpaymentDenomination(billpaymentId,billPaymentCashBreakDown);
     }
 
     @GetMapping("/test2")

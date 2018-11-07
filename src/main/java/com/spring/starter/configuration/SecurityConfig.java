@@ -177,6 +177,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/Teller-Queue/genarate-an-special-queue-number").permitAll()
                 .antMatchers("/Teller-Queue/genarate-redundent-token").permitAll()
                 .antMatchers("/reports/daily-report").permitAll()
+                .antMatchers("/Bank/save").permitAll()
+                .antMatchers("/Bank/update/").permitAll()
+                .antMatchers("/Bank/delete/").permitAll()
+                .antMatchers("/Bank/search-bank/").permitAll()
+                .antMatchers("/Bank/get-all-banks").permitAll()
                 .anyRequest().authenticated();
     }
 }

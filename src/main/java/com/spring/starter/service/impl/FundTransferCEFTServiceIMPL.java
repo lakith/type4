@@ -417,6 +417,7 @@ public class FundTransferCEFTServiceIMPL implements FundTransferCEFTService {
             }
             breakDown.setFundTransferCEFT(optional.get());
             try {
+                breakDown.setDate(java.util.Calendar.getInstance().getTime());
                 breakDown = fundTransferCEFTBreakDownRepository.save(breakDown);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());

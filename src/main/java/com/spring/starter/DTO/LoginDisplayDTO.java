@@ -15,6 +15,12 @@ public class LoginDisplayDTO {
 
     private StaffRole staffRole;
 
+    private String name;
+
+    private int userID;
+
+    private  String EPFNumber;
+
     public LoginDisplayDTO(String authToken, Branch branch) {
         this.authToken = authToken;
         this.branch = branch;
@@ -61,5 +67,29 @@ public class LoginDisplayDTO {
 
     public void setBrowserKey(String browserKey) {
         this.browserKey = browserKey;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public String getEPFNumber() {
+        return EPFNumber;
+    }
+
+    public void setEPFNumber(String EPFNumber) {
+        this.EPFNumber = EPFNumber;
     }
 }

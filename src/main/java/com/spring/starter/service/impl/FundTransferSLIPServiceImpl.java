@@ -321,6 +321,7 @@ public class FundTransferSLIPServiceImpl implements FundTransferSLIPService {
             }
             breakDown.setFundTransferSLIPS(optional.get());
             try {
+                breakDown.setDate(java.util.Calendar.getInstance().getTime());
                 breakDown = fundTransferSLIPSBreakDownRepository.save(breakDown);
             } catch (Exception e){
                 throw new CustomException(e.getMessage());

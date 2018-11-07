@@ -85,6 +85,15 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
         return new ResponseEntity<>(transactionRequest,HttpStatus.CREATED);
     }
 
+    public ResponseEntity<?> getAllTransactionRequests(){
+        List<CustomerTransactionRequest> transactionRequests = customerTransactionRequestRepository.findAll();
+        if(transactionRequests.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(transactionRequests,HttpStatus.OK);
+        }
+    }
+
     public ResponseEntity<?> viewATransactionRequest(int requestId){
         Optional<CustomerTransactionRequest> customerTransactionRequest = customerTransactionRequestRepository.findById(requestId);
         if(!customerTransactionRequest.isPresent()){
@@ -677,33 +686,6 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
 
 
         } else if(transactionRequrstId == TransactionIdConfig.FUND_TRANSFER_TO_OTHER_BANKS_SLIP){
-            Optional<CrediitCardPeyment> crediitCardPeymentOptional = creditCardPeymentRepository.getFormFromCSR(transactionRequrstId);
-            if(!crediitCardPeymentOptional.isPresent()){
-                return returnResponse();
-            } else {
-                CrediitCardPeyment crediitCardPeyment = crediitCardPeymentOptional.get();
-                if(crediitCardPeyment.getSignatureUrl() == null || crediitCardPeyment.getSignatureUrl().isEmpty()) {
-                    return withoutProvidingSignature();
-                } else {
-                    Optional<StaffUser> staffUserOpt = staffUserRepository.findById(Integer.parseInt(principal.getName()));
-                    if(!staffUserOpt.isPresent()){
-                        return identifiedAsUnauthorizedLogin();
-                    } else {
-                        CustomerTransactionRequest customerTransactionRequest1 = getCustomerTransactionRequest
-                                (customerTransactionRequest,staffUserOpt);
-
-                        crediitCardPeyment.setStatus(true);
-                        crediitCardPeyment.setRequestCompleteDate(java.util.Calendar.getInstance().getTime());
-                        crediitCardPeyment.setCustomerTransactionRequest(customerTransactionRequest1);
-
-                        crediitCardPeyment = creditCardPeymentRepository.save(crediitCardPeyment);
-
-                        return new  ResponseEntity<>(crediitCardPeyment,HttpStatus.OK);
-                    }
-                }
-            }
-
-        } else if(transactionRequrstId == TransactionIdConfig.CREDIT_CARD_PEYMENT){
             Optional<FundTransferSLIPS> optionalTransferSLIPS = fundTransferSLIPRepository.getFormFromCSR(transactionRequrstId);
             if(!optionalTransferSLIPS.isPresent()){
                 return returnResponse();
@@ -729,7 +711,32 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
                     }
                 }
             }
+        } else if(transactionRequrstId == TransactionIdConfig.CREDIT_CARD_PEYMENT){
+            Optional<CrediitCardPeyment> crediitCardPeymentOptional = creditCardPeymentRepository.getFormFromCSR(transactionRequrstId);
+            if(!crediitCardPeymentOptional.isPresent()){
+                return returnResponse();
+            } else {
+                CrediitCardPeyment crediitCardPeyment = crediitCardPeymentOptional.get();
+                if(crediitCardPeyment.getSignatureUrl() == null || crediitCardPeyment.getSignatureUrl().isEmpty()) {
+                    return withoutProvidingSignature();
+                } else {
+                    Optional<StaffUser> staffUserOpt = staffUserRepository.findById(Integer.parseInt(principal.getName()));
+                    if(!staffUserOpt.isPresent()){
+                        return identifiedAsUnauthorizedLogin();
+                    } else {
+                        CustomerTransactionRequest customerTransactionRequest1 = getCustomerTransactionRequest
+                                (customerTransactionRequest,staffUserOpt);
 
+                        crediitCardPeyment.setStatus(true);
+                        crediitCardPeyment.setRequestCompleteDate(java.util.Calendar.getInstance().getTime());
+                        crediitCardPeyment.setCustomerTransactionRequest(customerTransactionRequest1);
+
+                        crediitCardPeyment = creditCardPeymentRepository.save(crediitCardPeyment);
+
+                        return new  ResponseEntity<>(crediitCardPeyment,HttpStatus.OK);
+                    }
+                }
+            }
         } else {
             responseModel.setMessage("Invalid request detected");
             responseModel.setStatus(false);

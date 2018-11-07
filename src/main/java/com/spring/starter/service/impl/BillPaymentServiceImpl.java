@@ -1,6 +1,7 @@
 package com.spring.starter.service.impl;
 
 import com.spring.starter.DTO.BillPaymentUpdateDTO;
+import com.spring.starter.Exception.CustomException;
 import com.spring.starter.Repository.*;
 import com.spring.starter.components.SheduleMethods;
 import com.spring.starter.configuration.TransactionIdConfig;
@@ -54,6 +55,9 @@ public class BillPaymentServiceImpl implements BillPaymentService {
 
     @Autowired
     SheduleMethods sheduleMethods;
+
+    @Autowired
+    BillPaymentCashBreakDownRepository cashBreakDownRepository;
 
     @Override
     public ResponseEntity<?> saveBillPayment(BillPayment billPayment, int customerTransactionRequestId) {
@@ -410,6 +414,36 @@ public class BillPaymentServiceImpl implements BillPaymentService {
         }
 
     }
+
+    public ResponseEntity<?> setBillpaymentDenomination(int billpaymentId, BillPaymentCashBreakDown billPaymentCashBreakDown){
+        Optional<BillPayment> billPaymentOptional = billPaymentRepository.findById(billpaymentId);
+        if(!billPaymentOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }else {
+            Optional<CashDepositBreakDown> cashDepositBreakDown = cashBreakDownRepository.findBreakDown(billpaymentId);
+            if(cashDepositBreakDown.isPresent()){
+                billPaymentCashBreakDown.setBillPaymentCashBreakDownId(cashDepositBreakDown.get().getCashDepositBreakDownId());
+            }
+            billPaymentCashBreakDown.setBillPayment(billPaymentOptional.get());
+            try {
+                billPaymentCashBreakDown.setDate(java.util.Calendar.getInstance().getTime());
+                billPaymentCashBreakDown = cashBreakDownRepository.save(billPaymentCashBreakDown);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+
+            BillPayment billPayment = billPaymentOptional.get();
+            billPayment.setBillPaymentCashBreakDown(billPaymentCashBreakDown);
+
+            try {
+                billPayment = billPaymentRepository.save(billPayment);
+                return new ResponseEntity<>(billPayment,HttpStatus.OK);
+            } catch (Exception e){
+                throw new CustomException(e.getMessage());
+            }
+        }
+    }
+
 
     private List<BillPaymentErrorRecords> getBillPaymentErrors(BillPayment billPaymentOld, BillPayment billPaymentnew,
                                                                BillPaymentUpdateRecords billPaymentUpdateRecords)
