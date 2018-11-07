@@ -29,5 +29,7 @@ mylogfile.log
 
 *.gz
 
+*.log
+
 .gz
 /File Storage/
