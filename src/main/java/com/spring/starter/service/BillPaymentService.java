@@ -1,0 +1,25 @@
+package com.spring.starter.service;
+
+import com.spring.starter.DTO.BillPaymentUpdateDTO;
+import com.spring.starter.model.BillPayment;
+import com.spring.starter.model.BillPaymentCashBreakDown;
+import org.springframework.http.ResponseEntity;
+
+public interface BillPaymentService {
+
+    public ResponseEntity<?> saveBillPayment(BillPayment billPayment, int customerTransactionRequestId);
+
+    public ResponseEntity<?> getBillPaymentRequest(int billPaymentId);
+
+    public ResponseEntity<?> test();
+
+    public ResponseEntity<?> updateBillPayment(BillPayment billPayment, int customerTransactionRequestId,
+                                               BillPaymentUpdateDTO billPaymentUpdateDTO) throws Exception;
+
+    public ResponseEntity<?> setBillpaymentDenomination
+            (int billpaymentId, BillPaymentCashBreakDown billPaymentCashBreakDown);
+
+
+
+
+}
