@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface BillPaymentCashBreakDownRepository extends JpaRepository<BillPaymentCashBreakDown,Integer> {
 
     @Query("SELECT b FROM BillPaymentCashBreakDown b WHERE b.billPayment.billPaymentId =?1")
-    public Optional<CashDepositBreakDown> findBreakDown(int cashDepositId);
+    public Optional<BillPaymentCashBreakDown> findBreakDown(int billPaymentId);
 
 }

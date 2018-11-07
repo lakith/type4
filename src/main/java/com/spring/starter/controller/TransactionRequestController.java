@@ -157,4 +157,9 @@ public class TransactionRequestController {
         return trancsactionRequestService.getUncompletedRequests(customerServiceRequestId);
     }
 
+    @GetMapping("/get-breakDowns")
+    public ResponseEntity<?> getBreakDowns(@RequestParam(name = "customerServiceRequestId") int transactionCustomerId){
+        return trancsactionRequestService.getAllBreakDown(transactionCustomerId);
+    }
+
 }

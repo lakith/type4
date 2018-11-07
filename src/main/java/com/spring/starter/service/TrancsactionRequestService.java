@@ -65,4 +65,6 @@ public interface TrancsactionRequestService {
 
     public ResponseEntity<?> getAllTransactionRequests();
 
+    public ResponseEntity<?> getAllBreakDown(int transactionCustomerId);
+
 }

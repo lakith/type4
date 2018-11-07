@@ -36,4 +36,10 @@ public interface CustomerTransactionRequestRepository extends JpaRepository<Cust
 
     @Query("SELECT ctr FROM CustomerTransactionRequest ctr WHERE ctr.authorize = true and ctr.transactionCustomer.transactionCustomerId = ?1 ")
     List<CustomerTransactionRequest> getAllAuthorizeRequestsOfACustomer(int customerId);
+
+    @Query("SELECT ctr FROM CustomerTransactionRequest ctr WHERE ctr.transactionCustomer.transactionCustomerId = ?1 ")
+    List<CustomerTransactionRequest> getAllBYTransactionCustomer(int transactionCustomerId);
+
+
 }
+

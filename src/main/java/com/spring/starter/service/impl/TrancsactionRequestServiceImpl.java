@@ -17,10 +17,7 @@ import java.security.Principal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -65,6 +62,27 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
     @Autowired
     private CSRDataTransactionRepository csrtransactionRepository;
 
+    @Autowired
+    private CashDepositBreakDownRepository cashDepositBreakDownRepository;
+
+    @Autowired
+    private CashWithDrawalBreakDownRepositroy cashWithDrawalBreakDownRepositroy;
+
+    @Autowired
+    private CreditCardPaymentBreakDownRepository  creditCardPaymentBreakDownRepository;
+
+    @Autowired
+    private BillPaymentCashBreakDownRepository billPaymentCashBreakDownRepository;
+
+    @Autowired
+    private FundTransferWithinNDBBreakDownRepository fundTransferWithinNDBBreakDownRepository;
+
+    @Autowired
+    private FundTransferCEFTBreakDownRepository fundTransferCEFTBreakDownRepository;
+
+    @Autowired
+    private FundTransferSLIPSBreakDownRepository fundTransferSLIPSBreakDownRepository;
+
 
 
     @Override
@@ -93,6 +111,7 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
             return new ResponseEntity<>(transactionRequests,HttpStatus.OK);
         }
     }
+
 
     public ResponseEntity<?> viewATransactionRequest(int requestId){
         Optional<CustomerTransactionRequest> customerTransactionRequest = customerTransactionRequestRepository.findById(requestId);
@@ -812,8 +831,105 @@ public class TrancsactionRequestServiceImpl implements TrancsactionRequestServic
             }
             return new ResponseEntity<>(transactionRequests,HttpStatus.OK);
         } catch (Exception e) {
-            throw new CustomException("invalied date format");
+            throw new CustomException("invalid date format");
         }
     }
+
+    @Override
+    public ResponseEntity<?> getAllBreakDown(int transactionCustomerId) {
+
+        Map<String,Object> map=new HashMap<>();
+
+        Optional<TransactionCustomer> customerOptional=transactionCustomerRepository.findById(transactionCustomerId);
+
+        if (!customerOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        List<CustomerTransactionRequest> list=customerTransactionRequestRepository.getAllBYTransactionCustomer(transactionCustomerId);
+
+        if (list.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        for (CustomerTransactionRequest request : list){
+
+            int transactionRequestId = request.getTransactionRequest().getDigiFormId();
+            String digiFromType=request.getTransactionRequest().getDigiFormType();
+
+            if(transactionRequestId == TransactionIdConfig.DEPOSITS) {
+                Optional<CashDeposit> cashDeposit = cashdepositRepositiry.getFormFromCSR(transactionRequestId);
+                if(cashDeposit.isPresent()){
+                    Optional<CashDepositBreakDown> breakDown=cashDepositBreakDownRepository.findBreakDown(cashDeposit.get().getCashDepositId());
+                    if (breakDown.isPresent()){
+                        map.put(digiFromType,breakDown.get());
+                    }
+                }
+
+            } else if (transactionRequestId == TransactionIdConfig.WITHDRAWALS){
+                Optional<CashWithdrawal> cashWithdrawalOpt = cashWithdrawalRepository.getFormFromCSR(transactionRequestId);
+                if(cashWithdrawalOpt.isPresent()){
+                    Optional<CashWithDrawalBreakDown> breakDown=cashWithDrawalBreakDownRepositroy.findBreakDown(cashWithdrawalOpt.get().getCashWithdrawalId());
+                    if (breakDown.isPresent()){
+                        map.put(digiFromType,breakDown.get());
+                    }
+                }
+
+            } else if (transactionRequestId == TransactionIdConfig.BILLPAYMENT){
+                Optional<BillPayment> optional=billPaymentRepository.getFormFromCSR(transactionRequestId);
+                if (optional.isPresent()){
+                    Optional<BillPaymentCashBreakDown> breakDown=billPaymentCashBreakDownRepository.findBreakDown(optional.get().getBillPaymentId());
+                    if (breakDown.isPresent()){
+                        map.put(digiFromType,breakDown.get());
+                    }
+                }
+
+
+            } else if(transactionRequestId == TransactionIdConfig.FUND_TRANSFER_WITHIN_NDB) {
+                Optional<FundTransferWithinNDB> fundTransferWithinNDBOpt = fundTransferWithinNDBRepository.getFormFromCSR(transactionRequestId);
+                if(fundTransferWithinNDBOpt.isPresent()){
+                    Optional<FundTransferWithinNDBBreakDown> breakDown=fundTransferWithinNDBBreakDownRepository.findBreakDown(fundTransferWithinNDBOpt.get().getFundTransferWithinNdbId());
+                    if (breakDown.isPresent()){
+                        map.put(digiFromType,breakDown.get());
+                    }
+                }
+
+            } else if(transactionRequestId == TransactionIdConfig.FUND_TRANSFER_TO_OTHER_BANKS_CEFT) {
+                Optional<FundTransferCEFT> optionalTransferCEFT = fundTransferCEFTRepository.getFormFromCSR(transactionRequestId);
+                if(optionalTransferCEFT.isPresent()){
+                    Optional<FundTransferCEFTBreakDown>breakDown=fundTransferCEFTBreakDownRepository.findBreakDown(optionalTransferCEFT.get().getFundTransferCEFTId());
+                    if (breakDown.isPresent()){
+                        map.put(digiFromType,breakDown.get());
+                    }
+                }
+
+            } else if(transactionRequestId == TransactionIdConfig.FUND_TRANSFER_TO_OTHER_BANKS_SLIP){
+                Optional<FundTransferSLIPS> optionalTransferSLIPS = fundTransferSLIPRepository.getFormFromCSR(transactionRequestId);
+                if(optionalTransferSLIPS.isPresent()){
+                    Optional<FundTransferSLIPSBreakDown> breakDown=fundTransferSLIPSBreakDownRepository.findBreakDown(optionalTransferSLIPS.get().getFundTransferSLIPSId());
+                    if (breakDown.isPresent()){
+                        map.put(digiFromType,breakDown.get());
+                    }
+                }
+
+
+            } else if(transactionRequestId == TransactionIdConfig.CREDIT_CARD_PEYMENT){
+                Optional<CrediitCardPeyment> crediitCardPeymentOptional = creditCardPeymentRepository.getFormFromCSR(transactionRequestId);
+                if(crediitCardPeymentOptional.isPresent()){
+                    Optional<CreditCardPaymentBreakDown> breakDown=creditCardPaymentBreakDownRepository.findBreakDown(crediitCardPeymentOptional.get().getCrediitCardPeymentId());
+                    if (breakDown.isPresent()){
+                        map.put(digiFromType,breakDown.get());
+                    }
+                }
+
+            }
+
+        }
+
+        return new ResponseEntity<>(map,HttpStatus.OK);
+
+
+    }
+
 
 }
