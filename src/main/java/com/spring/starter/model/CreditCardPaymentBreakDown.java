@@ -1,5 +1,7 @@
 package com.spring.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -37,6 +39,7 @@ public class CreditCardPaymentBreakDown {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crediitCardPeymentId")
+    @JsonIgnore
     private CrediitCardPeyment crediitCardPeyment;
 
     public CreditCardPaymentBreakDown() {

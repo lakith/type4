@@ -136,6 +136,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/Transaction-Request/cash-deposit/update").permitAll()
                 .antMatchers("/Transaction-Request/cash-deposit/signature").permitAll()
                 .antMatchers("/Transaction-Request/cash-deposit-denominations").permitAll()
+                .antMatchers("/Transaction-request/credit-card-payment/**").permitAll()
                 .antMatchers("/Bank/save").permitAll()
                 .antMatchers("/Bank/update").permitAll()
                 .antMatchers("/Bank/delete/**").permitAll()

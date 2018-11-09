@@ -81,6 +81,10 @@ public class CrediitCardPeyment {
         @JoinColumn(name = "creditCardPaymentBreakDownId")
         private CreditCardPaymentBreakDown creditCardPaymentBreakDown;
 
+
+    public CrediitCardPeyment() {
+    }
+
     public CrediitCardPeyment(@NotNull @NotEmpty @Size(min = 9, max = 10, message = "mobile number must be between 9 and 10") @Pattern(regexp = "^([+0-9])*$") String telephoneNumber, @NotNull @Pattern(regexp = "^(CASH|CHEQUE)$") String paymenntMethod, Bank bank, Branch branch, String chequenumber, double ammount, Date date, int valueOf5000Notes, int valueOf2000Notes, int valueof1000Notes, int valueOf500Notes, int valueOf100Notes, int valueOf50Notes, int valueOf20Notes, int valueOf10Notes, double valueOfcoins, @NotNull double total, String signatureUrl, Date requestCompleteDate, boolean status, String url, List<CreditCardPaymentFiles> creditCardPaymentFiles, CustomerTransactionRequest customerTransactionRequest, CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
         this.telephoneNumber = telephoneNumber;
         this.paymenntMethod = paymenntMethod;
@@ -108,14 +112,11 @@ public class CrediitCardPeyment {
         this.creditCardPaymentBreakDown = creditCardPaymentBreakDown;
     }
 
-    public CrediitCardPeyment() {
-        }
-
     public int getCrediitCardPeymentId() {
         return crediitCardPeymentId;
     }
 
-    public void setCrediitCardPeymentId(int crediitCardPeyment) {
+    public void setCrediitCardPeymentId(int crediitCardPeymentId) {
         this.crediitCardPeymentId = crediitCardPeymentId;
     }
 
@@ -279,22 +280,6 @@ public class CrediitCardPeyment {
         this.status = status;
     }
 
-    public CustomerTransactionRequest getCustomerTransactionRequest() {
-        return customerTransactionRequest;
-    }
-
-    public void setCustomerTransactionRequest(CustomerTransactionRequest customerTransactionRequest) {
-        this.customerTransactionRequest = customerTransactionRequest;
-    }
-
-    public CreditCardPaymentBreakDown getCreditCardPaymentBreakDown() {
-        return creditCardPaymentBreakDown;
-    }
-
-    public void setCreditCardPaymentBreakDown(CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
-        this.creditCardPaymentBreakDown = creditCardPaymentBreakDown;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -309,5 +294,21 @@ public class CrediitCardPeyment {
 
     public void setCreditCardPaymentFiles(List<CreditCardPaymentFiles> creditCardPaymentFiles) {
         this.creditCardPaymentFiles = creditCardPaymentFiles;
+    }
+
+    public CustomerTransactionRequest getCustomerTransactionRequest() {
+        return customerTransactionRequest;
+    }
+
+    public void setCustomerTransactionRequest(CustomerTransactionRequest customerTransactionRequest) {
+        this.customerTransactionRequest = customerTransactionRequest;
+    }
+
+    public CreditCardPaymentBreakDown getCreditCardPaymentBreakDown() {
+        return creditCardPaymentBreakDown;
+    }
+
+    public void setCreditCardPaymentBreakDown(CreditCardPaymentBreakDown creditCardPaymentBreakDown) {
+        this.creditCardPaymentBreakDown = creditCardPaymentBreakDown;
     }
 }

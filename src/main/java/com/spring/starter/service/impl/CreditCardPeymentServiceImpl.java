@@ -295,14 +295,14 @@ public class CreditCardPeymentServiceImpl implements CreditCardPeymentService {
     }
 
     @Override
-    public ResponseEntity<?> updateCardPayment(CrediitCardPeyment crediitCardPeyment, int customerTransactionRequestId, DetailsUpdateDTO detailsUpdateDTO) throws Exception {
+    public ResponseEntity<?> updateCardPayment(CrediitCardPeyment crediitCardPeyment, int customerTransactionRequestId, DetailsUpdateDTO detailsUpdateDTO){
 
         Optional<CustomerTransactionRequest> customerTransactionRequest;
 
         try {
             customerTransactionRequest = customerTransactionRequestRepository.findById(customerTransactionRequestId);
         } catch (Exception e) {
-            throw  new Exception(e.getMessage());
+            throw  new CustomException(e.getMessage());
         }
         if (!customerTransactionRequest.isPresent()) {
             responseModel.setMessage("Invalid Transaction Request");
@@ -321,7 +321,7 @@ public class CreditCardPeymentServiceImpl implements CreditCardPeymentService {
         try {
             optionalCrediitCardPeyment= creditCardPeymentRepository.getFormFromCSR(customerTransactionRequestId);
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
 
         if (!optionalCrediitCardPeyment.isPresent()){
@@ -332,7 +332,8 @@ public class CreditCardPeymentServiceImpl implements CreditCardPeymentService {
 
         crediitCardPeyment.setCreditCardPaymentFiles(optionalCrediitCardPeyment.get().getCreditCardPaymentFiles());
         crediitCardPeyment.setCustomerTransactionRequest(customerTransactionRequest.get());
-
+        //
+        crediitCardPeyment.setCrediitCardPeymentId(optionalCrediitCardPeyment.get().getCrediitCardPeymentId());
         CreditCardPaymentUpdateRecord creditCardPaymentUpdateRecord= new CreditCardPaymentUpdateRecord();
 
         UUID uuid = UUID.randomUUID();
@@ -375,7 +376,7 @@ public class CreditCardPeymentServiceImpl implements CreditCardPeymentService {
                     responseModel.setStatus(true);
                     return new ResponseEntity<>(responseModel,HttpStatus.CREATED);
                 } catch (Exception e) {
-                    throw new Exception(e.getMessage());
+                    throw new CustomException(e.getMessage());
                 }
             }
 
